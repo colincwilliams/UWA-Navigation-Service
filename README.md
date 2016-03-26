@@ -3,7 +3,7 @@
 ## What is it?
 **NOTE: This is still in early development. Use at your own risk. Breaking changes will most likely be introduced.**
 
-This is a C# library for handling page navigation in modern Windows applications (Windows 8 and greater). It takes the SuspensionManager and NavigationHelper files from the Visual Studio App Templates, adds the ability to pass complex objects during page navigation, and makes it a library.
+This is a C# library for handling page navigation for Universal Windows Platform (UWP) applications. It takes the SuspensionManager and NavigationHelper files from the Visual Studio App Templates, adds the ability to pass complex objects during page navigation, and makes it a library.
 
 Key features:
 * Register and unregister your root frame. * See "Known Issues" below for multiple frame support
