@@ -115,9 +115,6 @@ namespace ColinCWilliams.CSharpNavigationService
                     nextPageIndex++;
                     nextPageKey = "Page-" + nextPageIndex;
                 }
-
-                // Activate the ViewModel
-                await this.ViewModel.Activate(context);
             }
             else
             {
@@ -125,6 +122,9 @@ namespace ColinCWilliams.CSharpNavigationService
                 // recreating pages discarded from cache
                 pageState = (Dictionary<string, object>)frameState[this.pageKey];
             }
+
+            // Activate the ViewModel
+            await this.ViewModel.Activate(context);
 
             this.LoadState(context, pageState);
         }
