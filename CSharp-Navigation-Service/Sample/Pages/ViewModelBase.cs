@@ -1,7 +1,9 @@
 ﻿using ColinCWilliams.CSharpNavigationService;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,10 +13,12 @@ namespace Sample.Pages
      * All of your ViewModels must implement the
      * INavigatableViewModel interface to work with PageBase.
      *********************************************************/
-    public abstract class ViewModelBase : INavigatableViewModel
+    public abstract class ViewModelBase : INavigatableViewModel, INotifyPropertyChanged
     {
         private DelegateCommand goBackCommand;
         private DelegateCommand goForwardCommand;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public DelegateCommand GoBackCommand
         {
@@ -65,6 +69,16 @@ namespace Sample.Pages
             this.GoForwardCommand.RaiseCanExecuteChanged();
 
             return Task.FromResult(false);
+        }
+
+        protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] String propertyName = "")
+        {
+            field = value;
+
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

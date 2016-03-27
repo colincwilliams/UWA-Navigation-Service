@@ -35,7 +35,7 @@ namespace Sample
              *********************************************************/
 
             // Add NavigationContext sub-types
-            // typeof(MyNavigationContext),
+            typeof(MyNavigationContext),
             // typeof(MyOtherNavigationContext),
             // etc.
 
