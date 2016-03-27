@@ -12,31 +12,42 @@
         <StackPanel>
             <TextBlock FontSize="50">Page 1</TextBlock>
 
-            <Grid>
+            <Grid Margin="0 20 0 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="10" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
 
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
                 <Button
+                    Grid.Row="0"
                     Grid.Column="0"
                     Command="{Binding GoBackCommand}">
                     Go Back
                 </Button>
 
                 <Button
+                    Grid.Row="0"
                     Grid.Column="2"
                     Command="{Binding GoForwardCommand}">
                     Go Forward
                 </Button>
-            </Grid>
 
-            <Button
-                Command="{Binding NavigateToMainPageCommand}"
-                Margin="0 10 0 0">
-                Main Page
-            </Button>
+                <Button
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Grid.Row="1"
+                    Command="{Binding NavigateToMainPageCommand}"
+                    Margin="0 10 0 0"
+                    HorizontalAlignment="Stretch">
+                    Main Page
+                </Button>
+            </Grid>
         </StackPanel>
     </Grid>
 </csns:PageBase>
