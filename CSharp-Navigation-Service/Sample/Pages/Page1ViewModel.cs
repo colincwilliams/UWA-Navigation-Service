@@ -7,23 +7,17 @@ using System.Threading.Tasks;
 
 namespace Sample.Pages
 {
-    public class Page1ViewModel : ViewModelBase, INavigatableViewModel
+    public class Page1ViewModel : ViewModelBase
     {
-        private RelayCommand navigateToMainPageCommand;
+        private DelegateCommand navigateToMainPageCommand;
 
-        public Task Activate(NavigationContextBase navigationContext)
-        {
-            // No navigationContext expected, so nothing to do
-            return Task.FromResult(false);
-        }
-
-        public RelayCommand NavigateToMainPageCommand
+        public DelegateCommand NavigateToMainPageCommand
         {
             get
             {
                 if (this.navigateToMainPageCommand == null)
                 {
-                    this.navigateToMainPageCommand = new RelayCommand((o) =>
+                    this.navigateToMainPageCommand = new DelegateCommand((o) =>
                     {
                         App.AppNavigationService.Navigate(typeof(MainPage));
                     });
