@@ -55,7 +55,7 @@ namespace Sample.Pages
         /*********************************************************
          * Activate is called during the OnNavigatedTo page event.
          *********************************************************/
-        public virtual Task Activate(NavigationContextBase navigationContext)
+        public virtual Task Activate(NavigationContextBase navigationContext, Dictionary<string, object> pageState)
         {
             /*********************************************************
              * If you use the CanGoBack() or CanGoForward() methods
@@ -69,6 +69,11 @@ namespace Sample.Pages
             this.GoForwardCommand.RaiseCanExecuteChanged();
 
             return Task.FromResult(false);
+        }
+
+        public virtual void Deactivate(Dictionary<string, object> pageState)
+        {
+            // Nothing to do
         }
 
         protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] String propertyName = "")

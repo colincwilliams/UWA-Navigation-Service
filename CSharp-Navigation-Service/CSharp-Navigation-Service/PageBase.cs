@@ -124,9 +124,7 @@ namespace ColinCWilliams.CSharpNavigationService
             }
 
             // Activate the ViewModel
-            await this.ViewModel.Activate(context);
-
-            this.LoadState(context, pageState);
+            await this.ViewModel.Activate(context, pageState);
         }
 
         /// <summary>
@@ -140,7 +138,7 @@ namespace ColinCWilliams.CSharpNavigationService
             Dictionary<string, object> frameState = SuspensionManager.Instance.SessionStateForFrame(this.Frame);
 
             var pageState = new Dictionary<string, object>();
-            this.SaveState(pageState);
+            this.ViewModel.Deactivate(pageState);
 
             frameState[this.pageKey] = pageState;
         }

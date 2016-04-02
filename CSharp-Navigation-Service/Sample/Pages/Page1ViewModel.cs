@@ -56,24 +56,30 @@ namespace Sample.Pages
             set { this.SetPropertyValue(ref this.value3, value); }
         }
 
-        public async override Task Activate(NavigationContextBase navigationContext)
+        public async override Task Activate(NavigationContextBase navigationContext, Dictionary<string, object> pageState)
         {
-            await base.Activate(navigationContext);
-
-            if (IsActive)
-            {
-                return;
-            }
+            await base.Activate(navigationContext, pageState);
 
             MyNavigationContext context = navigationContext as MyNavigationContext;
-            if (context != null)
+            if (pageState != null)
+            {
+                this.Value1 = pageState[nameof(this.Value1)] as string;
+                this.Value2 = pageState[nameof(this.Value2)] as string;
+                this.Value3 = pageState[nameof(this.Value3)] as string;
+            }
+            else if (context != null)
             {
                 this.Value1 = context.Value1;
                 this.Value2 = context.Value2;
                 this.Value3 = context.Value3;
             }
+        }
 
-            this.IsActive = true;
+        public override void Deactivate(Dictionary<string, object> pageState)
+        {
+            pageState[nameof(this.Value1)] = this.Value1;
+            pageState[nameof(this.Value2)] = this.Value2;
+            pageState[nameof(this.Value3)] = this.Value3;
         }
     }
 }
