@@ -56,7 +56,7 @@ namespace Sample.Pages
             set { this.SetPropertyValue(ref this.value3, value); }
         }
 
-        public async override Task Activate(NavigationContextBase navigationContext, Dictionary<string, object> pageState)
+        public async override Task Activate(NavigationContextBase navigationContext, IReadOnlyDictionary<string, object> pageState)
         {
             await base.Activate(navigationContext, pageState);
 
@@ -75,7 +75,7 @@ namespace Sample.Pages
             }
         }
 
-        public override void Deactivate(Dictionary<string, object> pageState)
+        public override void Deactivate(IDictionary<string, object> pageState)
         {
             base.Deactivate(pageState);
 
