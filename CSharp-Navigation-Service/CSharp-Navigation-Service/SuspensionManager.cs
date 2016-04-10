@@ -13,6 +13,7 @@ namespace ColinCWilliams.CSharpNavigationService
     using System.IO;
     using System.Runtime.Serialization;
     using System.Threading.Tasks;
+    using System.Linq;
     using Windows.Storage;
     using Windows.Storage.Streams;
     using Windows.UI.Xaml;
@@ -23,6 +24,12 @@ namespace ColinCWilliams.CSharpNavigationService
     /// </summary>
     public interface ISuspensionManager
     {
+        /// <summary>
+        /// Gets a List of custom types provided to the <see cref="DataContractSerializer"/> when
+        /// reading and writing session state.
+        /// </summary>
+        IReadOnlyCollection<Type> KnownTypes { get; }
+
         /// <summary>
         /// Adds a type to the known types list for serialization.
         /// </summary>
@@ -151,10 +158,9 @@ namespace ColinCWilliams.CSharpNavigationService
 
         /// <summary>
         /// Gets a List of custom types provided to the <see cref="DataContractSerializer"/> when
-        /// reading and writing session state.  Initially empty, additional types may be
-        /// added to customize the serialization process.
+        /// reading and writing session state.
         /// </summary>
-        private List<Type> KnownTypes
+        public IReadOnlyCollection<Type> KnownTypes
         {
             get { return this.knownTypes; }
         }
@@ -250,7 +256,7 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (!this.KnownTypes.Contains(type))
             {
-                this.KnownTypes.Add(type);
+                this.knownTypes.Add(type);
             }
         }
 

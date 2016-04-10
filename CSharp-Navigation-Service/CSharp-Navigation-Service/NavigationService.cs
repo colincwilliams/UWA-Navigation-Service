@@ -14,6 +14,7 @@ namespace ColinCWilliams.CSharpNavigationService
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Threading.Tasks;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -202,6 +203,13 @@ namespace ColinCWilliams.CSharpNavigationService
             if (pageType == null)
             {
                 throw new ArgumentNullException("pageType");
+            }
+
+            if (context != null && !SuspensionManager.Instance.KnownTypes.Contains(context.GetType()))
+            {
+                throw new ArgumentException(
+                    "Cannot navigate with a context that has not been registered as a Known Type. Use NavigationService.AddKnownTypes to register this context type before use.",
+                    "context");
             }
 
             object parameter = null;
