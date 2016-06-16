@@ -15,6 +15,11 @@ Key features:
 ## How to use it?
 The NavigationService is the entry-point to the library and is where all of you interactions will take place. It mimicks the navigation methods of the Frame class.
 
+### Sample App
+* See the Sample App project for an example of how to set things up
+* It is heavily commented with explanations
+* It can be used as a starting point for a new project
+
 ### Setup
 * Modify your App.xaml.cs to:
   * Change the default page cache mode, if desired
@@ -36,7 +41,11 @@ The NavigationService is the entry-point to the library and is where all of you 
 * Open the solution in Visual Studio
 * Choose Build -> Build Solution to build
 
-### Testing
+### Sample App
+* In addition to providing an example for users of the library, the Sample App should be used for smoke testing before check-in, particularly while there aren't unit tests.
+* The Sample App should be set as the Startup Project. Hit F5 (Play) to run it.
+
+### Tests
 No official testing supported yet. Unit tests and sample app planned for future which will support this.
 
 ## Known Issues
