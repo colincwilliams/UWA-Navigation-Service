@@ -27,8 +27,8 @@ The NavigationService is the entry-point to the library and is where all of you 
   * Save the returned NavigationService for future use with an IOC or other method of your choosing
   * If your app was "Terminated" last, restore the NavigationService's state
   * In your app's OnSuspending event handler, call NavigationService.SaveState()
- * Modify your pages to inherit from PageBase
- * Modify your ViewModels to implement INavigatableViewModel
+* Modify your pages to inherit from PageBase
+* Modify your ViewModels to implement INavigatableViewModel
 
 ### Navigation
 * Get the NavigationService for the Frame you want to navigate
