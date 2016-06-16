@@ -1,20 +1,21 @@
-﻿// Helper class provided to make the sample functional and is not
+﻿// <copyright file="DelegateCommand.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+// Helper class provided to make the sample functional and is not
 // a core part of the CSharp-Navigation-Service.
 //
 // Modified from: http://stackoverflow.com/a/11964495
-
-using System;
-using System.Diagnostics;
-using System.Windows.Input;
-
 namespace Sample
 {
+    using System;
+    using System.Windows.Input;
+
     public class DelegateCommand : ICommand
     {
-        private readonly Func<object, bool> _canExecuteMethod;
-        private readonly Action<object> _executeMethod;
-
-        #region Constructors
+        private readonly Func<object, bool> canExecuteMethod;
+        private readonly Action<object> executeMethod;
 
         public DelegateCommand(Action<object> executeMethod)
             : this(executeMethod, null)
@@ -23,63 +24,47 @@ namespace Sample
 
         public DelegateCommand(Action<object> executeMethod, Func<object, bool> canExecuteMethod)
         {
-            _executeMethod = executeMethod;
-            _canExecuteMethod = canExecuteMethod;
+            this.executeMethod = executeMethod;
+            this.canExecuteMethod = canExecuteMethod;
         }
-
-        #endregion Constructors
-
-        #region ICommand Members
 
         public event EventHandler CanExecuteChanged;
 
         bool ICommand.CanExecute(object parameter)
         {
-            return CanExecute(parameter);
+            return this.CanExecute(parameter);
         }
 
         void ICommand.Execute(object parameter)
         {
-            Execute(parameter);
+            this.Execute(parameter);
         }
-
-        #endregion ICommand Members
-
-        #region Public Methods
 
         public bool CanExecute(object parameter)
         {
-            return ((_canExecuteMethod == null) || _canExecuteMethod(parameter));
+            return (this.canExecuteMethod == null) || this.canExecuteMethod(parameter);
         }
 
         public void Execute(object parameter)
         {
-            if (_executeMethod != null)
+            if (this.executeMethod != null)
             {
-                _executeMethod(parameter);
+                this.executeMethod(parameter);
             }
         }
 
         public void RaiseCanExecuteChanged()
         {
-            OnCanExecuteChanged(EventArgs.Empty);
+            this.OnCanExecuteChanged(EventArgs.Empty);
         }
-
-        #endregion Public Methods
-
-        #region Protected Methods
 
         protected virtual void OnCanExecuteChanged(EventArgs e)
         {
-            var handler = CanExecuteChanged;
+            var handler = this.CanExecuteChanged;
             if (handler != null)
             {
                 handler(this, e);
             }
         }
-
-        #endregion Protected Methods
     }
 }
-
-

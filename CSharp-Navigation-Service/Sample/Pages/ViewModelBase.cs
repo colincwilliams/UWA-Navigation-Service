@@ -1,14 +1,16 @@
-﻿using ColinCWilliams.CSharpNavigationService;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="ViewModelBase.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
-namespace Sample.Pages
+namespace Sample
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
+    using ColinCWilliams.CSharpNavigationService;
+
     /*********************************************************
      * All of your ViewModels must implement the
      * INavigatableViewModel interface to work with PageBase.
@@ -76,13 +78,13 @@ namespace Sample.Pages
             // Nothing to do
         }
 
-        protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] String propertyName = "")
+        protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             field = value;
 
-            if (PropertyChanged != null)
+            if (this.PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

@@ -1,12 +1,14 @@
-﻿using ColinCWilliams.CSharpNavigationService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="Page1ViewModel.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
-namespace Sample.Pages
+namespace Sample
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using ColinCWilliams.CSharpNavigationService;
+
     public class Page1ViewModel : ViewModelBase
     {
         private DelegateCommand navigateToMainPageCommand;
@@ -23,14 +25,14 @@ namespace Sample.Pages
                 {
                     this.navigateToMainPageCommand = new DelegateCommand((o) =>
                     {
-                        App.AppNavigationService.Navigate(
-                            typeof(MainPage),
-                            new MyNavigationContext()
-                            {
-                                Value1 = this.Value1,
-                                Value2 = this.Value2,
-                                Value3 = this.Value3
-                            });
+                        MyNavigationContext context = new MyNavigationContext()
+                        {
+                            Value1 = this.Value1,
+                            Value2 = this.Value2,
+                            Value3 = this.Value3
+                        };
+
+                        App.AppNavigationService.Navigate(typeof(MainPage), context);
                     });
                 }
 
@@ -77,6 +79,8 @@ namespace Sample.Pages
 
         public override void Deactivate(IDictionary<string, object> pageState)
         {
+            base.Deactivate(pageState);
+
             pageState[nameof(this.Value1)] = this.Value1;
             pageState[nameof(this.Value2)] = this.Value2;
             pageState[nameof(this.Value3)] = this.Value3;

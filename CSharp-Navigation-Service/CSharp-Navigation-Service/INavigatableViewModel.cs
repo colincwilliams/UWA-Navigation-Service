@@ -1,10 +1,7 @@
-﻿//-----------------------------------------------------------------------
-// <summary>Defines the interface for a ViewModel for a page that can be navigated to.</summary>
-// <copyright file="INavigatableViewModel.cs" company="Colin C. Williams">
-//     Copyright (c) Colin C. Williams. All rights reserved.
+﻿// <copyright file="INavigatableViewModel.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
-// <author>Colin Williams</author>
-//-----------------------------------------------------------------------
 
 namespace ColinCWilliams.CSharpNavigationService
 {

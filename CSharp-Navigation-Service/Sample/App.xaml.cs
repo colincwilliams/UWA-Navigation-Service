@@ -1,20 +1,24 @@
-﻿using ColinCWilliams.CSharpNavigationService;
-using Sample.Pages;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
+﻿// <copyright file="App.xaml.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 namespace Sample
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using ColinCWilliams.CSharpNavigationService;
+    using Windows.ApplicationModel;
+    using Windows.ApplicationModel.Activation;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Navigation;
+
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    public sealed partial class App : Application
     {
         private readonly List<Type> knownTypes = new List<Type>
         {
@@ -36,6 +40,7 @@ namespace Sample
 
             // Add NavigationContext sub-types
             typeof(MyNavigationContext),
+
             // typeof(MyOtherNavigationContext),
             // etc.
 
@@ -45,17 +50,13 @@ namespace Sample
             // etc.
         };
 
-        /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
         public App()
         {
             Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
                 Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            this.Suspending += this.OnSuspending;
 
             /*********************************************************
              * PageBase sets the default cache mode for new pages to
@@ -66,6 +67,7 @@ namespace Sample
              * Note: the cache mode for individual pages can be
              * overidden in their constructor as desired.
              *********************************************************/
+
             // PageBase.DefaultCacheMode = NavigationCacheMode.Disabled;
         }
 
@@ -99,7 +101,7 @@ namespace Sample
                 // Create the NavigationService for the frame
                 App.AppNavigationService = NavigationService.RegisterFrame(rootFrame, "RootFrame");
 
-                rootFrame.NavigationFailed += OnNavigationFailed;
+                rootFrame.NavigationFailed += this.OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -131,6 +133,7 @@ namespace Sample
                 // parameter
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
+
             // Ensure the current window is active
             Window.Current.Activate();
         }
@@ -140,7 +143,7 @@ namespace Sample
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }

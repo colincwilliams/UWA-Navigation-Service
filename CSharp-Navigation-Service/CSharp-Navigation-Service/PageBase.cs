@@ -1,13 +1,7 @@
-﻿//-----------------------------------------------------------------------
-// <summary>
-// A base class that all pages should inherit from for navigation, state
-// saving and other essential functionality.
-// </summary>
-// <copyright file="PageBase.cs" company="Colin C. Williams">
-//     Copyright (c) Colin C. Williams. All rights reserved.
+﻿// <copyright file="PageBase.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
-// <author>Colin Williams</author>
-//-----------------------------------------------------------------------
 
 namespace ColinCWilliams.CSharpNavigationService
 {
@@ -101,7 +95,7 @@ namespace ColinCWilliams.CSharpNavigationService
 
             // Get the NavigationContext
             NavigationContextBase context = this.GetContextFromParameter(e.Parameter);
-            
+
             Dictionary<string, object> pageState = null;
 
             if (e.NavigationMode == NavigationMode.New)
@@ -142,20 +136,6 @@ namespace ColinCWilliams.CSharpNavigationService
 
             frameState[this.pageKey] = pageState;
         }
-
-        /// <summary>
-        /// Called from <see cref="OnNavigatedFrom" /> so that the page can save its current state
-        /// for app suspension.
-        /// </summary>
-        /// <param name="pageState">The dictionary where the state should be saved.</param>
-        protected abstract void SaveState(Dictionary<string, object> pageState);
-
-        /// <summary>
-        /// Called from <see cref="OnNavigatedTo" /> so that the page can load its saved state.
-        /// </summary>
-        /// <param name="context">The context that the page should use when loading its state.</param>
-        /// <param name="pageState">The state of the page.</param>
-        protected abstract void LoadState(NavigationContextBase context, Dictionary<string, object> pageState);
 
         private static bool IsParameterNull(object parameter)
         {

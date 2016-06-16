@@ -1,23 +1,12 @@
-﻿using ColinCWilliams.CSharpNavigationService;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+﻿// <copyright file="Page1.xaml.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
-namespace Sample.Pages
+namespace Sample
 {
+    using ColinCWilliams.CSharpNavigationService;
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -36,24 +25,6 @@ namespace Sample.Pages
              * The latter pattern is used with MVVM light.
              *********************************************************/
             this.DataContext = new Page1ViewModel();
-        }
-
-        protected override void LoadState(NavigationContextBase context, Dictionary<string, object> pageState)
-        {
-            /*********************************************************
-             * Called from the NavigatedTo method for the page.
-             * Load your page's previously saved state into the UI
-             * using the provided pageState.
-             *********************************************************/
-        }
-
-        protected override void SaveState(Dictionary<string, object> pageState)
-        {
-            /*********************************************************
-             * Called from the NavigatedFrom method for the page.
-             * Save your page's state into the provided pageState
-             * object.
-             *********************************************************/
         }
     }
 }
