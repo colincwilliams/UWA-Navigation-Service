@@ -10,6 +10,7 @@ Key features:
 * Pass complex, custom objects as the parameter between pages during navigation
 * Full support for app suspension and resuming
 * Sets the default page cache mode to be "Enabled"
+* Can be used in an MVVM model application structure
 
 ## How to use it?
 The NavigationService is the entry-point to the library and is where all of you interactions will take place. It mimicks the navigation methods of the Frame class.
