@@ -45,12 +45,11 @@ The NavigationService is the entry-point to the library and is where all of you 
 
 ### Sample App
 * In addition to providing an example for users of the library, the Sample App should be used for smoke testing before check-in, particularly while there aren't unit tests.
-* The Sample App should be set as the Startup Project. Hit F5 (Play) to run it.
+* The Sample App should already be set as the Startup Project. Hit F5 (Play) to run it.
 
 ### Tests
-No official testing supported yet. Unit tests and sample app planned for future which will support this.
+No official testing supported yet. Unit tests planned for future.
 
 ## Known Issues
-* No test/sample app
 * Multiple frame support is untested and unverified. In theory it works?
 * No unit tests
