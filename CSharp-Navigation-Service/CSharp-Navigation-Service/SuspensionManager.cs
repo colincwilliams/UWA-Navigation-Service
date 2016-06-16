@@ -1,87 +1,20 @@
-﻿//-----------------------------------------------------------------------
-// <summary>A class to manage app suspension and restoration.</summary>
-// <copyright file="SuspensionManager.cs" company="Colin C. Williams">
-//     Copyright (c) Colin C. Williams. All rights reserved.
+﻿// <copyright file="SuspensionManager.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
-// <author>Colin Williams</author>
-//-----------------------------------------------------------------------
 
 namespace ColinCWilliams.CSharpNavigationService
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Runtime.Serialization;
     using System.Threading.Tasks;
     using Windows.Storage;
     using Windows.Storage.Streams;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
-
-    /// <summary>
-    /// A class to manage app suspension and restoration.
-    /// </summary>
-    public interface ISuspensionManager
-    {
-        /// <summary>
-        /// Adds a type to the known types list for serialization.
-        /// </summary>
-        /// <param name="type">The type to add.</param>
-        void AddKnownType(Type type);
-
-        /// <summary>
-        /// Registers a <see cref="Frame"/> instance to allow its navigation history to be saved to
-        /// and restored from <see cref="SessionState"/>.  Frames should be registered once
-        /// immediately after creation if they will participate in session state management.  Upon
-        /// registration if state has already been restored for the specified key
-        /// the navigation history will immediately be restored.  Subsequent invocations of
-        /// <see cref="RestoreAsync"/> will also restore navigation history.
-        /// </summary>
-        /// <param name="frame">An instance whose navigation history should be managed by
-        /// <see cref="SuspensionManager"/></param>
-        /// <param name="sessionStateKey">A unique key into <see cref="SessionState"/> used to
-        /// store navigation-related information.</param>
-        /// <param name="sessionBaseKey">An optional key that identifies the type of session.
-        /// This can be used to distinguish between multiple application launch scenarios.</param>
-        void RegisterFrame(Frame frame, string sessionStateKey, string sessionBaseKey = null);
-
-        /// <summary>
-        /// Restores previously saved <see cref="SessionState"/>.  Any <see cref="Frame"/> instances
-        /// registered with <see cref="RegisterFrame"/> will also restore their prior navigation
-        /// state, which in turn gives their active <see cref="Page"/> an opportunity restore its
-        /// state.
-        /// </summary>
-        /// <param name="sessionBaseKey">An optional key that identifies the type of session.
-        /// This can be used to distinguish between multiple application launch scenarios.</param>
-        /// <returns>An asynchronous task that reflects when session state has been read.  The
-        /// content of <see cref="SessionState"/> should not be relied upon until this task
-        /// completes.</returns>
-        Task RestoreAsync(string sessionBaseKey = null);
-
-        /// <summary>
-        /// Save the current <see cref="SessionState"/>.  Any <see cref="Frame"/> instances
-        /// registered with <see cref="RegisterFrame"/> will also preserve their current
-        /// navigation stack, which in turn gives their active <see cref="Page"/> an opportunity
-        /// to save its state.
-        /// </summary>
-        /// <returns>An asynchronous task that reflects when session state has been saved.</returns>
-        Task SaveAsync();
-
-        /// <summary>
-        /// Provides storage for session state associated with the specified <see cref="Frame"/>.
-        /// Frames that have been previously registered with <see cref="RegisterFrame"/> have
-        /// their session state saved and restored automatically as a part of the global
-        /// <see cref="SessionState"/>.  Frames that are not registered have transient state
-        /// that can still be useful when restoring pages that have been discarded from the
-        /// navigation cache.
-        /// </summary>
-        /// <remarks>Apps may choose to rely on <see cref="NavigationHelper"/> to manage
-        /// page-specific state instead of working with frame session state directly.</remarks>
-        /// <param name="frame">The instance for which session state is desired.</param>
-        /// <returns>A collection of state subject to the same serialization mechanism as
-        /// <see cref="SessionState"/>.</returns>
-        Dictionary<string, object> SessionStateForFrame(Frame frame);
-    }
 
     /// <summary>
     /// SuspensionManager captures global session state to simplify process lifetime management
@@ -151,10 +84,9 @@ namespace ColinCWilliams.CSharpNavigationService
 
         /// <summary>
         /// Gets a List of custom types provided to the <see cref="DataContractSerializer"/> when
-        /// reading and writing session state.  Initially empty, additional types may be
-        /// added to customize the serialization process.
+        /// reading and writing session state.
         /// </summary>
-        private List<Type> KnownTypes
+        public IReadOnlyCollection<Type> KnownTypes
         {
             get { return this.knownTypes; }
         }
@@ -250,7 +182,7 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (!this.KnownTypes.Contains(type))
             {
-                this.KnownTypes.Add(type);
+                this.knownTypes.Add(type);
             }
         }
 
@@ -327,8 +259,6 @@ namespace ColinCWilliams.CSharpNavigationService
         /// that can still be useful when restoring pages that have been discarded from the
         /// navigation cache.
         /// </summary>
-        /// <remarks>Apps may choose to rely on <see cref="NavigationHelper"/> to manage
-        /// page-specific state instead of working with frame session state directly.</remarks>
         /// <param name="frame">The instance for which session state is desired.</param>
         /// <returns>A collection of state subject to the same serialization mechanism as
         /// <see cref="SessionState"/>.</returns>

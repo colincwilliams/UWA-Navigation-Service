@@ -1,62 +1,16 @@
-﻿//-----------------------------------------------------------------------
-// <summary>
-// A navigation service which facilitates Frame navigation and suspension
-// with passing of complex types.
-// </summary>
-// <copyright file="NavigationService.cs" company="Colin C. Williams">
-//     Copyright (c) Colin C. Williams. All rights reserved.
+﻿// <copyright file="NavigationService.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
-// <author>Colin Williams</author>
-//-----------------------------------------------------------------------
 
 namespace ColinCWilliams.CSharpNavigationService
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Threading.Tasks;
-    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
-
-    /// <summary>
-    /// The interface for a NavigationService that supports passing complex types.
-    /// </summary>
-    public interface INavigationService
-    {
-        /// <summary>
-        /// Gets the context service associated with this NavigationService.
-        /// </summary>
-        INavigationContextService ContextService { get; }
-
-        /// <summary>
-        /// Navigate back a page in the back stack.
-        /// </summary>
-        void GoBack();
-
-        /// <summary>
-        /// Determines if you calling <see cref="GoBack" /> will success.
-        /// </summary>
-        /// <returns>True if back navigation can occur, false otherwise.</returns>
-        bool CanGoBack();
-
-        /// <summary>
-        /// Navigate forward a page in the forward stack.
-        /// </summary>
-        void GoForward();
-
-        /// <summary>
-        /// Determines if you calling <see cref="GoForward" /> will success.
-        /// </summary>
-        /// <returns>True if forward navigation can occur, false otherwise.</returns>
-        bool CanGoForward();
-
-        /// <summary>
-        /// Navigate to the specified page with the provided context.
-        /// </summary>
-        /// <param name="pageType">The type of page to navigate to.</param>
-        /// <param name="context">The context that should be provided to the page after navigation.</param>
-        void Navigate(Type pageType, NavigationContextBase context = null);
-    }
 
     /// <summary>
     /// A navigation service which facilitates Frame navigation and suspension
@@ -65,7 +19,7 @@ namespace ColinCWilliams.CSharpNavigationService
     public class NavigationService : INavigationService
     {
         private static readonly Dictionary<Frame, INavigationService> NavigationServices = new Dictionary<Frame, INavigationService>();
-        
+
         private readonly INavigationContextService contextService;
 
         private NavigationService(Frame frame, INavigationContextService contextService)
@@ -82,11 +36,19 @@ namespace ColinCWilliams.CSharpNavigationService
             get { return this.contextService; }
         }
 
-        private Frame RootFrame
-        {
-            get;
-            set;
-        }
+        /// <summary>
+        /// Gets a value indicating whether calling <see cref="GoBack" /> will success.
+        /// </summary>
+        /// <returns>True if back navigation can occur, false otherwise.</returns>
+        public bool CanGoBack => this.RootFrame != null && this.RootFrame.CanGoBack;
+
+        /// <summary>
+        /// Gets a value indicating whether calling <see cref="GoForward" /> will success.
+        /// </summary>
+        /// <returns>True if forward navigation can occur, false otherwise.</returns>
+        public bool CanGoForward => this.RootFrame != null && this.RootFrame.CanGoForward;
+
+        private Frame RootFrame { get; }
 
         /// <summary>
         /// Creates a new NavigationService for a Frame, registering the frame and NavigationService
@@ -130,6 +92,8 @@ namespace ColinCWilliams.CSharpNavigationService
             {
                 throw new ArgumentNullException("frame");
             }
+
+            SuspensionManager.Instance.UnregisterNavigationService(frame);
 
             if (!NavigationServices.Remove(frame))
             {
@@ -204,8 +168,15 @@ namespace ColinCWilliams.CSharpNavigationService
                 throw new ArgumentNullException("pageType");
             }
 
+            if (context != null && !SuspensionManager.Instance.KnownTypes.Contains(context.GetType()))
+            {
+                throw new ArgumentException(
+                    "Cannot navigate with a context that has not been registered as a Known Type. Use NavigationService.AddKnownTypes to register this context type before use.",
+                    "context");
+            }
+
             object parameter = null;
-            
+
             if (context != null)
             {
                 parameter = this.contextService.Add(context);
@@ -215,29 +186,11 @@ namespace ColinCWilliams.CSharpNavigationService
         }
 
         /// <summary>
-        /// Determines if you calling <see cref="GoBack" /> will success.
-        /// </summary>
-        /// <returns>True if back navigation can occur, false otherwise.</returns>
-        public bool CanGoBack()
-        {
-            return this.RootFrame != null && this.RootFrame.CanGoBack;
-        }
-
-        /// <summary>
-        /// Determines if you calling <see cref="GoForward" /> will success.
-        /// </summary>
-        /// <returns>True if forward navigation can occur, false otherwise.</returns>
-        public bool CanGoForward()
-        {
-            return this.RootFrame != null && this.RootFrame.CanGoForward;
-        }
-
-        /// <summary>
         /// Navigate back a page in the back stack.
         /// </summary>
         public void GoBack()
         {
-            if (this.CanGoBack())
+            if (this.CanGoBack)
             {
                 this.RootFrame.GoBack();
             }
@@ -248,7 +201,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// </summary>
         public void GoForward()
         {
-            if (this.CanGoForward())
+            if (this.CanGoForward)
             {
                 this.RootFrame.GoForward();
             }

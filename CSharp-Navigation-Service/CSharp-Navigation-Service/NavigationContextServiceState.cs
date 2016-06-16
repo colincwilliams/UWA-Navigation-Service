@@ -1,10 +1,7 @@
-﻿//-----------------------------------------------------------------------
-// <summary>The state of a NavigationContextService for saving or restoring.</summary>
-// <copyright file="NavigationContextServiceState.cs" company="Colin C. Williams">
-//     Copyright (c) Colin C. Williams. All rights reserved.
+﻿// <copyright file="NavigationContextServiceState.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
-// <author>Colin Williams</author>
-//-----------------------------------------------------------------------
 
 namespace ColinCWilliams.CSharpNavigationService
 {
@@ -26,7 +23,8 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <summary>
         /// Gets or sets the navigation contexts being stored.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Needs to be serialized"), DataMember]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Needs to be serialized")]
+        [DataMember]
         public NavigationContextStore Store { get; set; }
     }
 }
