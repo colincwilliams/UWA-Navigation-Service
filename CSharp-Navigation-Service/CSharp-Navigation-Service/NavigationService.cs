@@ -36,11 +36,19 @@ namespace ColinCWilliams.CSharpNavigationService
             get { return this.contextService; }
         }
 
-        private Frame RootFrame
-        {
-            get;
-            set;
-        }
+        /// <summary>
+        /// Gets a value indicating whether calling <see cref="GoBack" /> will success.
+        /// </summary>
+        /// <returns>True if back navigation can occur, false otherwise.</returns>
+        public bool CanGoBack => this.RootFrame != null && this.RootFrame.CanGoBack;
+
+        /// <summary>
+        /// Gets a value indicating whether calling <see cref="GoForward" /> will success.
+        /// </summary>
+        /// <returns>True if forward navigation can occur, false otherwise.</returns>
+        public bool CanGoForward => this.RootFrame != null && this.RootFrame.CanGoForward;
+
+        private Frame RootFrame { get; }
 
         /// <summary>
         /// Creates a new NavigationService for a Frame, registering the frame and NavigationService
@@ -84,6 +92,8 @@ namespace ColinCWilliams.CSharpNavigationService
             {
                 throw new ArgumentNullException("frame");
             }
+
+            SuspensionManager.Instance.UnregisterNavigationService(frame);
 
             if (!NavigationServices.Remove(frame))
             {
@@ -176,29 +186,11 @@ namespace ColinCWilliams.CSharpNavigationService
         }
 
         /// <summary>
-        /// Determines if you calling <see cref="GoBack" /> will success.
-        /// </summary>
-        /// <returns>True if back navigation can occur, false otherwise.</returns>
-        public bool CanGoBack()
-        {
-            return this.RootFrame != null && this.RootFrame.CanGoBack;
-        }
-
-        /// <summary>
-        /// Determines if you calling <see cref="GoForward" /> will success.
-        /// </summary>
-        /// <returns>True if forward navigation can occur, false otherwise.</returns>
-        public bool CanGoForward()
-        {
-            return this.RootFrame != null && this.RootFrame.CanGoForward;
-        }
-
-        /// <summary>
         /// Navigate back a page in the back stack.
         /// </summary>
         public void GoBack()
         {
-            if (this.CanGoBack())
+            if (this.CanGoBack)
             {
                 this.RootFrame.GoBack();
             }
@@ -209,7 +201,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// </summary>
         public void GoForward()
         {
-            if (this.CanGoForward())
+            if (this.CanGoForward)
             {
                 this.RootFrame.GoForward();
             }

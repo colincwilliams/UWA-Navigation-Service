@@ -30,7 +30,7 @@ namespace Sample
                 {
                     this.goBackCommand = new DelegateCommand(
                         (o) => App.AppNavigationService.GoBack(),
-                        (o) => App.AppNavigationService.CanGoBack());
+                        (o) => App.AppNavigationService.CanGoBack);
                 }
 
                 return this.goBackCommand;
@@ -45,7 +45,7 @@ namespace Sample
                 {
                     this.goForwardCommand = new DelegateCommand(
                         (o) => App.AppNavigationService.GoForward(),
-                        (o) => App.AppNavigationService.CanGoForward());
+                        (o) => App.AppNavigationService.CanGoForward);
                 }
 
                 return this.goForwardCommand;

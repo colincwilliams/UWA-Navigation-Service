@@ -18,26 +18,26 @@ namespace ColinCWilliams.CSharpNavigationService
         INavigationContextService ContextService { get; }
 
         /// <summary>
+        /// Gets a value indicating whether calling <see cref="GoBack" /> will success.
+        /// </summary>
+        /// <returns>True if back navigation can occur, false otherwise.</returns>
+        bool CanGoBack { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether calling <see cref="GoForward" /> will success.
+        /// </summary>
+        /// <returns>True if forward navigation can occur, false otherwise.</returns>
+        bool CanGoForward { get; }
+
+        /// <summary>
         /// Navigate back a page in the back stack.
         /// </summary>
         void GoBack();
 
         /// <summary>
-        /// Determines if you calling <see cref="GoBack" /> will success.
-        /// </summary>
-        /// <returns>True if back navigation can occur, false otherwise.</returns>
-        bool CanGoBack();
-
-        /// <summary>
         /// Navigate forward a page in the forward stack.
         /// </summary>
         void GoForward();
-
-        /// <summary>
-        /// Determines if you calling <see cref="GoForward" /> will success.
-        /// </summary>
-        /// <returns>True if forward navigation can occur, false otherwise.</returns>
-        bool CanGoForward();
 
         /// <summary>
         /// Navigate to the specified page with the provided context.

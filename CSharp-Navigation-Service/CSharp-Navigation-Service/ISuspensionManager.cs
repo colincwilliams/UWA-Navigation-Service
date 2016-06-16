@@ -45,6 +45,15 @@ namespace ColinCWilliams.CSharpNavigationService
         void RegisterFrame(Frame frame, string sessionStateKey, string sessionBaseKey = null);
 
         /// <summary>
+        /// Disassociates a <see cref="Frame"/> previously registered.
+        /// Any navigation state previously captured will be
+        /// removed.
+        /// </summary>
+        /// <param name="frame">An instance whose navigation history should no longer be
+        /// managed.</param>
+        void UnregisterNavigationService(Frame frame);
+
+        /// <summary>
         /// Restores previously saved session state. Any <see cref="Frame"/> instances
         /// registered with <see cref="RegisterFrame"/> will also restore their prior navigation
         /// state, which in turn gives their active <see cref="Page"/> an opportunity restore its
