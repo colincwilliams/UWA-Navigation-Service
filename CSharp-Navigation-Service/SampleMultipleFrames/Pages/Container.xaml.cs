@@ -1,4 +1,7 @@
-﻿// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+﻿// <copyright file="Container.xaml.cs" company="Colin C. Williams">
+// Copyright (c) Colin C. Williams. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 namespace SampleMultipleFrames
 {
