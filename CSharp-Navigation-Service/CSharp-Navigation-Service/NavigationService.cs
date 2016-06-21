@@ -7,7 +7,6 @@ namespace ColinCWilliams.CSharpNavigationService
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.UI.Xaml.Controls;
@@ -18,14 +17,30 @@ namespace ColinCWilliams.CSharpNavigationService
     /// </summary>
     public class NavigationService : INavigationService
     {
-        private static readonly Dictionary<Frame, INavigationService> NavigationServices = new Dictionary<Frame, INavigationService>();
+        // private static readonly Dictionary<WeakReference<Frame>, INavigationService> NavigationServices = new Dictionary<WeakReference<Frame>, INavigationService>();
+        private static readonly IList<NavigationService> NavigationServices = new List<NavigationService>();
+        private static readonly ISuspensionManager SuspensionManager = new SuspensionManager();
 
         private readonly INavigationContextService contextService;
+        private readonly WeakReference<Frame> rootFrame;
+        private readonly string name;
 
         private NavigationService(Frame frame, INavigationContextService contextService)
         {
+            if (frame == null)
+            {
+                throw new ArgumentNullException(nameof(frame));
+            }
+
+            if (contextService == null)
+            {
+                throw new ArgumentNullException(nameof(frame));
+            }
+
             this.contextService = contextService;
-            this.RootFrame = frame;
+            this.rootFrame = new WeakReference<Frame>(frame);
+            this.name = frame.Name;
+            this.PageStates = new Dictionary<string, PageState>();
         }
 
         /// <summary>
@@ -35,6 +50,11 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             get { return this.contextService; }
         }
+
+        /// <summary>
+        /// Gets the states for the individual pages this Navigation Service has seen.
+        /// </summary>
+        public IDictionary<string, PageState> PageStates { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether calling <see cref="GoBack" /> will success.
@@ -48,35 +68,74 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <returns>True if forward navigation can occur, false otherwise.</returns>
         public bool CanGoForward => this.RootFrame != null && this.RootFrame.CanGoForward;
 
-        private Frame RootFrame { get; }
+        /// <summary>
+        /// Gets the root frame for the navigation service.
+        /// </summary>
+        internal Frame RootFrame
+        {
+            get
+            {
+                Frame frame = this.GetFrameSafe();
+                if (frame == null)
+                {
+                    throw new InvalidOperationException("NavigationService still in use after Frame has been garbage collected.");
+                }
+
+                return frame;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of this NavigationService.
+        /// </summary>
+        internal string Name
+        {
+            get
+            {
+                if (this.GetFrameSafe().Name != this.name)
+                {
+                    throw new InvalidOperationException("Frame's name changed after this NavigationService was constructed.");
+                }
+
+                return this.name;
+            }
+        }
 
         /// <summary>
         /// Creates a new NavigationService for a Frame, registering the frame and NavigationService
         /// for future retrieval and registering the frame with the NavigationContextService.
         /// </summary>
         /// <param name="frame">The frame to register.</param>
-        /// <param name="frameKey">The unique identifying key for this frame; used for restoring state.</param>
+        /// <param name="defaultPage">The default page to navigate to if there is no state to restore.</param>
         /// <returns>The NavigationService for the registered frame.</returns>
-        public static INavigationService RegisterFrame(Frame frame, string frameKey)
+        public static INavigationService RegisterFrame(Frame frame, Type defaultPage)
         {
             if (frame == null)
             {
                 throw new ArgumentNullException("frame");
             }
 
-            if (string.IsNullOrWhiteSpace(frameKey))
+            if (defaultPage == null)
             {
-                throw new ArgumentNullException("frameKey");
+                throw new ArgumentNullException("defaultPage");
             }
 
-            if (NavigationServices.ContainsKey(frame))
+            if (GetNavigationService(frame) != null)
             {
                 throw new InvalidOperationException("Frame already associated with a NavigationService.");
             }
 
-            INavigationService navigationService = new NavigationService(frame, new NavigationContextService());
-            NavigationServices.Add(frame, navigationService);
-            SuspensionManager.Instance.RegisterFrame(frame, frameKey);
+            // Clean up references before adding a new one.
+            RemoveFrame();
+
+            NavigationService navigationService = new NavigationService(frame, new NavigationContextService());
+            NavigationServices.Add(navigationService);
+            navigationService.RestoreState();
+
+            if (navigationService.RootFrame.Content == null)
+            {
+                navigationService.Navigate(defaultPage);
+            }
 
             return navigationService;
         }
@@ -93,12 +152,7 @@ namespace ColinCWilliams.CSharpNavigationService
                 throw new ArgumentNullException("frame");
             }
 
-            SuspensionManager.Instance.UnregisterNavigationService(frame);
-
-            if (!NavigationServices.Remove(frame))
-            {
-                Debug.Assert(false, "Unregistered frame attempted to be unregistered.");
-            }
+            RemoveFrame(frame);
         }
 
         /// <summary>
@@ -113,12 +167,7 @@ namespace ColinCWilliams.CSharpNavigationService
                 throw new ArgumentNullException("frame");
             }
 
-            if (!NavigationServices.ContainsKey(frame))
-            {
-                throw new InvalidOperationException("Frame not associated with a NavigationService.");
-            }
-
-            return NavigationServices[frame];
+            return NavigationServices.FirstOrDefault(x => x.RootFrame == frame);
         }
 
         /// <summary>
@@ -128,7 +177,11 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <returns>The task for this operation.</returns>
         public static async Task SaveStateAsync()
         {
-            await SuspensionManager.Instance.SaveAsync();
+            // Clean up NavigationServices so we don't save the state of services with no Frame.
+            RemoveFrame();
+
+            // Save state to disk.
+            await SuspensionManager.SaveAsync(NavigationServices);
         }
 
         /// <summary>
@@ -137,7 +190,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <returns>The task for this operation.</returns>
         public static async Task RestoreStateAsync()
         {
-            await SuspensionManager.Instance.RestoreAsync();
+            await SuspensionManager.RestoreAsync();
         }
 
         /// <summary>
@@ -151,7 +204,7 @@ namespace ColinCWilliams.CSharpNavigationService
             {
                 foreach (Type type in types)
                 {
-                    SuspensionManager.Instance.AddKnownType(type);
+                    SuspensionManager.AddKnownType(type);
                 }
             }
         }
@@ -168,7 +221,7 @@ namespace ColinCWilliams.CSharpNavigationService
                 throw new ArgumentNullException("pageType");
             }
 
-            if (context != null && !SuspensionManager.Instance.KnownTypes.Contains(context.GetType()))
+            if (context != null && !SuspensionManager.KnownTypes.Contains(context.GetType()))
             {
                 throw new ArgumentException(
                     "Cannot navigate with a context that has not been registered as a Known Type. Use NavigationService.AddKnownTypes to register this context type before use.",
@@ -205,6 +258,61 @@ namespace ColinCWilliams.CSharpNavigationService
             {
                 this.RootFrame.GoForward();
             }
+        }
+
+        /// <summary>
+        /// Saves the state of this NavigationService.
+        /// </summary>
+        /// <returns>The saved state.</returns>
+        internal FrameState SaveState()
+        {
+            return new FrameState()
+            {
+                Navigation = this.RootFrame.GetNavigationState(),
+                ContextService = this.ContextService.SaveState(),
+                PageStates = this.PageStates
+            };
+        }
+
+        /// <summary>
+        /// Removes the NavigationService for the provided frame and cleans up any NavigationServices where their
+        /// Frame has been garbage collected.
+        /// </summary>
+        /// <param name="frame">The frame to remove or null to just clean up invalid WeakReferences.</param>
+        private static void RemoveFrame(Frame frame = null)
+        {
+            IEnumerable<NavigationService> servicesToRemove = NavigationServices.AsEnumerable().Where(x => x.GetFrameSafe() == null || x.GetFrameSafe() == frame);
+            foreach (NavigationService service in servicesToRemove.ToList())
+            {
+                SuspensionManager.DeleteState(service.Name);
+                NavigationServices.Remove(service);
+            }
+        }
+
+        /// <summary>
+        /// Restores the state of this Navigation Service from the <see cref="SuspensionManager"/>.
+        /// </summary>
+        private void RestoreState()
+        {
+            FrameState state = SuspensionManager.GetState(this.Name);
+
+            if (state != null)
+            {
+                this.ContextService.RestoreState(state.ContextService);
+                this.PageStates = state.PageStates;
+
+                // SetNavigationState last so that everything else is restored.
+                // This triggers OnNavigatedTo call for the page.
+                this.RootFrame.SetNavigationState(state.Navigation);
+            }
+        }
+
+        private Frame GetFrameSafe()
+        {
+            Frame frame = null;
+            this.rootFrame.TryGetTarget(out frame);
+
+            return frame;
         }
     }
 }

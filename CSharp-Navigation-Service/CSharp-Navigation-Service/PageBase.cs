@@ -74,7 +74,13 @@ namespace ColinCWilliams.CSharpNavigationService
             if (this.navigationService == null)
             {
                 this.navigationService = NavigationService.GetNavigationService(this.Frame);
+                if (this.navigationService == null)
+                {
+                    throw new InvalidOperationException("Frame not registered before page navigation.");
+                }
+
                 this.contextService = this.navigationService.ContextService;
+                Debug.Assert(this.contextService != null, "A navigation service's context service should never be null.");
             }
 
             // Set ViewModel
@@ -83,20 +89,20 @@ namespace ColinCWilliams.CSharpNavigationService
                 INavigatableViewModel viewModel = this.DataContext as INavigatableViewModel;
                 if (viewModel == null)
                 {
-                    throw new InvalidOperationException("Viewmodel must implement IActivatableViewModel interface.");
+                    throw new InvalidOperationException("ViewModel must implement INavigatableViewModel interface.");
                 }
 
                 this.ViewModel = viewModel;
             }
 
             // Load page state if this page wasn't already cached by the frame
-            var frameState = SuspensionManager.Instance.SessionStateForFrame(this.Frame);
+            IDictionary<string, PageState> pageStates = this.navigationService.PageStates;
             this.pageKey = "Page-" + this.Frame.BackStackDepth;
 
             // Get the NavigationContext
             NavigationContextBase context = this.GetContextFromParameter(e.Parameter);
 
-            Dictionary<string, object> pageState = null;
+            PageState pageState = null;
 
             if (e.NavigationMode == NavigationMode.New)
             {
@@ -104,21 +110,23 @@ namespace ColinCWilliams.CSharpNavigationService
                 // navigation stack
                 var nextPageKey = this.pageKey;
                 int nextPageIndex = this.Frame.BackStackDepth;
-                while (frameState.Remove(nextPageKey))
+                while (pageStates.Remove(nextPageKey))
                 {
                     nextPageIndex++;
                     nextPageKey = "Page-" + nextPageIndex;
                 }
+
+                // TODO: Also clean up stored navigation contexts when removing forward stack.
             }
             else
             {
                 // Load page state using the same strategy for loading suspended state and
                 // recreating pages discarded from cache
-                pageState = (Dictionary<string, object>)frameState[this.pageKey];
+                pageStates.TryGetValue(this.pageKey, out pageState);
             }
 
             // Activate the ViewModel
-            await this.ViewModel.Activate(context, pageState);
+            await this.ViewModel.Activate(this.navigationService, context, pageState);
         }
 
         /// <summary>
@@ -129,12 +137,14 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             base.OnNavigatedFrom(e);
 
-            Dictionary<string, object> frameState = SuspensionManager.Instance.SessionStateForFrame(this.Frame);
+            PageState pageState = null;
+            if (!this.navigationService.PageStates.TryGetValue(this.pageKey, out pageState))
+            {
+                pageState = new PageState();
+                this.navigationService.PageStates[this.pageKey] = pageState;
+            }
 
-            var pageState = new Dictionary<string, object>();
-            this.ViewModel.Deactivate(pageState);
-
-            frameState[this.pageKey] = pageState;
+            this.ViewModel.Deactivate(this.navigationService.PageStates[this.pageKey]);
         }
 
         private static bool IsParameterNull(object parameter)

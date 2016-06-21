@@ -16,10 +16,11 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <summary>
         /// Activates the ViewModel with the given NavigationContext.
         /// </summary>
+        /// <param name="navigationService">The navigation service for this view model.</param>
         /// <param name="navigationContext">The context in which the page is being activated.</param>
         /// /// <param name="pageState">The previously saved state of the page if it exists, otherwise null.</param>
         /// <returns>The task for this operation.</returns>
-        Task Activate(NavigationContextBase navigationContext, IReadOnlyDictionary<string, object> pageState);
+        Task Activate(INavigationService navigationService, NavigationContextBase navigationContext, IReadOnlyDictionary<string, object> pageState);
 
         /// <summary>
         /// Deactivates the view model, giving it a chance to save its state and delete any event subscriptions.

@@ -3,7 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-namespace Sample
+namespace SampleCommon
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -32,7 +32,7 @@ namespace Sample
                             Value3 = this.Value3
                         };
 
-                        App.AppNavigationService.Navigate(typeof(Page1), context);
+                        this.NavigationService.Navigate(typeof(Page1), context);
                     });
                 }
 
@@ -58,9 +58,9 @@ namespace Sample
             set { this.SetPropertyValue(ref this.value3, value); }
         }
 
-        public async override Task Activate(NavigationContextBase navigationContext, IReadOnlyDictionary<string, object> pageState)
+        public async override Task Activate(INavigationService navigationService, NavigationContextBase navigationContext, IReadOnlyDictionary<string, object> pageState)
         {
-            await base.Activate(navigationContext, pageState);
+            await base.Activate(navigationService, navigationContext, pageState);
 
             MyNavigationContext context = navigationContext as MyNavigationContext;
             if (pageState != null)

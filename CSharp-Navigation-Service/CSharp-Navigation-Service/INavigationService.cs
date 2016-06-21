@@ -6,6 +6,7 @@
 namespace ColinCWilliams.CSharpNavigationService
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The interface for a NavigationService that supports passing complex types.
@@ -16,6 +17,11 @@ namespace ColinCWilliams.CSharpNavigationService
         /// Gets the context service associated with this NavigationService.
         /// </summary>
         INavigationContextService ContextService { get; }
+
+        /// <summary>
+        /// Gets the states for the individual pages this Navigation Service has seen.
+        /// </summary>
+        IDictionary<string, PageState> PageStates { get; }
 
         /// <summary>
         /// Gets a value indicating whether calling <see cref="GoBack" /> will success.

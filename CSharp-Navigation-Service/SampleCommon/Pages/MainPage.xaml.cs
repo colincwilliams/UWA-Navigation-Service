@@ -1,18 +1,16 @@
-﻿// <copyright file="Page1.xaml.cs" company="Colin C. Williams">
+﻿// <copyright file="MainPage.xaml.cs" company="Colin C. Williams">
 // Copyright (c) Colin C. Williams. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-namespace Sample
+namespace SampleCommon
 {
     using ColinCWilliams.CSharpNavigationService;
+    using Windows.UI.Xaml.Navigation;
 
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class Page1 : PageBase
+    public sealed partial class MainPage : PageBase
     {
-        public Page1()
+        public MainPage()
         {
             this.InitializeComponent();
 
@@ -24,7 +22,15 @@ namespace Sample
              *
              * The latter pattern is used with MVVM light.
              *********************************************************/
-            this.DataContext = new Page1ViewModel();
+            this.DataContext = new MainPageViewModel();
+
+            /*********************************************************
+             * Optionally override the cache mode for this page. If
+             * you have a "home page" that the user will frequently
+             * return to, that's a good candidate to make "Required"
+             * so that it's always cached.
+             *********************************************************/
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
     }
 }
