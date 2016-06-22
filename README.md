@@ -6,7 +6,7 @@
 This is a C# library for handling page navigation for Universal Windows Platform (UWP) applications. It takes the SuspensionManager and NavigationHelper files from the Visual Studio App Templates, adds the ability to pass complex objects during page navigation, and makes it a library.
 
 Key features:
-* Register and unregister your root frame. * See "Known Issues" below for multiple frame support
+* Register and unregister ALL your frames, with multiple frame support.
 * Pass complex, custom objects as the parameter between pages during navigation
 * Full support for app suspension and resuming
 * Sets the default page cache mode to be "Enabled"
@@ -15,25 +15,25 @@ Key features:
 ## How to use it?
 The NavigationService is the entry-point to the library and is where all of you interactions will take place. It mimicks the navigation methods of the Frame class.
 
-### Sample App
-* See the Sample App project for an example of how to set things up
-* It is heavily commented with explanations
-* It can be used as a starting point for a new project
+### Sample Apps
+* See the Sample App projects for an example of how to set things up with both a single Frame and multiple frames
+* They are heavily commented with explanations
+* They can be used as a starting point for a new project
 
 ### Setup
 * Modify your App.xaml.cs to:
   * Change the default page cache mode, if desired
   * Register your root frame with the NavigationService
-  * Save the returned NavigationService for future use with an IOC or other method of your choosing
   * If your app was "Terminated" last, restore the NavigationService's state
   * In your app's OnSuspending event handler, call NavigationService.SaveState()
 * Modify your pages to inherit from PageBase
 * Modify your ViewModels to implement INavigatableViewModel
 
 ### Navigation
-* Get the NavigationService for the Frame you want to navigate
+* When your ViewModel is activated, save the NavigationSerice provided to it so that it can be used for navigation.
 * Call NavigationService.Navigate(Type pageType, NavigationContextBase context) to navigate, passing either null or your custom navigation context
 * Call any of the other navigation methods as needed
+* If you want to navigate with a NavigationService for a different frame, provide access using an IOC or other global method.
 
 ## Development
 
@@ -43,13 +43,15 @@ The NavigationService is the entry-point to the library and is where all of you 
 * Open the solution in Visual Studio
 * Choose Build -> Build Solution to build
 
-### Sample App
-* In addition to providing an example for users of the library, the Sample App should be used for smoke testing before check-in, particularly while there aren't unit tests.
+### Sample Apps
+* In addition to providing an example for users of the library, the Sample Apps should be used for smoke testing before check-in, particularly while there aren't unit tests.
+* "Sample" shows usage with a single frame.
+* "SampleMultipleFrames" shows usage with multiple frames.
+* Both Sample Apps should be smoke tested before check-in as sometimes changes can crop up in one or the other.
 * The Sample App should already be set as the Startup Project. Hit F5 (Play) to run it.
 
 ### Tests
 No official testing supported yet. Unit tests planned for future.
 
 ## Known Issues
-* Multiple frame support is untested and unverified. In theory it works?
 * No unit tests
