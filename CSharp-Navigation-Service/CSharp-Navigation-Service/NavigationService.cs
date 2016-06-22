@@ -17,8 +17,7 @@ namespace ColinCWilliams.CSharpNavigationService
     /// </summary>
     public class NavigationService : INavigationService
     {
-        // private static readonly Dictionary<WeakReference<Frame>, INavigationService> NavigationServices = new Dictionary<WeakReference<Frame>, INavigationService>();
-        private static readonly IList<NavigationService> NavigationServices = new List<NavigationService>();
+        private static readonly List<NavigationService> NavigationServices = new List<NavigationService>();
         private static readonly ISuspensionManager SuspensionManager = new SuspensionManager();
 
         private readonly INavigationContextService contextService;
@@ -60,13 +59,13 @@ namespace ColinCWilliams.CSharpNavigationService
         /// Gets a value indicating whether calling <see cref="GoBack" /> will success.
         /// </summary>
         /// <returns>True if back navigation can occur, false otherwise.</returns>
-        public bool CanGoBack => this.RootFrame != null && this.RootFrame.CanGoBack;
+        public bool CanGoBack => this.RootFrame.CanGoBack;
 
         /// <summary>
         /// Gets a value indicating whether calling <see cref="GoForward" /> will success.
         /// </summary>
         /// <returns>True if forward navigation can occur, false otherwise.</returns>
-        public bool CanGoForward => this.RootFrame != null && this.RootFrame.CanGoForward;
+        public bool CanGoForward => this.RootFrame.CanGoForward;
 
         /// <summary>
         /// Gets the root frame for the navigation service.
@@ -107,8 +106,11 @@ namespace ColinCWilliams.CSharpNavigationService
         /// </summary>
         /// <param name="frame">The frame to register.</param>
         /// <param name="defaultPage">The default page to navigate to if there is no state to restore.</param>
+        /// <param name="defaultNavigationContext">The navigation context to provide on navigation to defaultPage.</param>
+        /// <param name="restoreState">True to attempt to restore previously saved state, false to just navigate to defaultPage
+        ///     without attempting to restore state.</param>
         /// <returns>The NavigationService for the registered frame.</returns>
-        public static INavigationService RegisterFrame(Frame frame, Type defaultPage)
+        public static INavigationService RegisterFrame(Frame frame, Type defaultPage, NavigationContextBase defaultNavigationContext = null, bool restoreState = true)
         {
             if (frame == null)
             {
@@ -129,12 +131,21 @@ namespace ColinCWilliams.CSharpNavigationService
             RemoveFrame();
 
             NavigationService navigationService = new NavigationService(frame, new NavigationContextService());
-            NavigationServices.Add(navigationService);
-            navigationService.RestoreState();
 
+            // Ensure navigationService is fully registered before restoring state
+            // or navigating so that it can be accessed by PageBase.
+            NavigationServices.Add(navigationService);
+
+            if (restoreState)
+            {
+                // This triggers NavigatedTo on PageBase if there is state restored.
+                navigationService.RestoreState();
+            }
+
+            // If state wasn't restored, navigate to a default page to populate the Frame.
             if (navigationService.RootFrame.Content == null)
             {
-                navigationService.Navigate(defaultPage);
+                navigationService.Navigate(defaultPage, defaultNavigationContext);
             }
 
             return navigationService;
@@ -281,7 +292,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <param name="frame">The frame to remove or null to just clean up invalid WeakReferences.</param>
         private static void RemoveFrame(Frame frame = null)
         {
-            IEnumerable<NavigationService> servicesToRemove = NavigationServices.AsEnumerable().Where(x => x.GetFrameSafe() == null || x.GetFrameSafe() == frame);
+            IEnumerable<NavigationService> servicesToRemove = NavigationServices.Where(x => x.GetFrameSafe() == null || x.GetFrameSafe() == frame);
             foreach (NavigationService service in servicesToRemove.ToList())
             {
                 SuspensionManager.DeleteState(service.Name);

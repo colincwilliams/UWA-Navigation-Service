@@ -99,6 +99,7 @@ namespace Sample
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame()
                 {
+                    // TODO: Add comment about why to name your Frames.
                     Name = "RootFrame"
                 };
 
