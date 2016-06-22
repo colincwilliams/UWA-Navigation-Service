@@ -3,7 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-namespace Sample
+namespace SampleCommon
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -29,8 +29,8 @@ namespace Sample
                 if (this.goBackCommand == null)
                 {
                     this.goBackCommand = new DelegateCommand(
-                        (o) => App.AppNavigationService.GoBack(),
-                        (o) => App.AppNavigationService.CanGoBack);
+                        (o) => this.NavigationService?.GoBack(),
+                        (o) => this.NavigationService?.CanGoBack);
                 }
 
                 return this.goBackCommand;
@@ -44,21 +44,25 @@ namespace Sample
                 if (this.goForwardCommand == null)
                 {
                     this.goForwardCommand = new DelegateCommand(
-                        (o) => App.AppNavigationService.GoForward(),
-                        (o) => App.AppNavigationService.CanGoForward);
+                        (o) => this.NavigationService?.GoForward(),
+                        (o) => this.NavigationService?.CanGoForward);
                 }
 
                 return this.goForwardCommand;
             }
         }
 
+        protected INavigationService NavigationService { get; private set; }
+
         protected bool IsActive { get; set; }
 
         /*********************************************************
          * Activate is called during the OnNavigatedTo page event.
          *********************************************************/
-        public virtual Task Activate(NavigationContextBase navigationContext, IReadOnlyDictionary<string, object> pageState)
+        public virtual Task Activate(INavigationService navigationService, NavigationContextBase navigationContext, IReadOnlyDictionary<string, object> pageState)
         {
+            this.NavigationService = navigationService;
+
             /*********************************************************
              * If you use the CanGoBack() or CanGoForward() methods
              * as a DelegateCommand's CanExecute method, you must

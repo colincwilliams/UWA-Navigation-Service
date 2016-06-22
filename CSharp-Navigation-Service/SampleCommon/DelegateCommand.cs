@@ -7,14 +7,14 @@
 // a core part of the CSharp-Navigation-Service.
 //
 // Modified from: http://stackoverflow.com/a/11964495
-namespace Sample
+namespace SampleCommon
 {
     using System;
     using System.Windows.Input;
 
     public class DelegateCommand : ICommand
     {
-        private readonly Func<object, bool> canExecuteMethod;
+        private readonly Func<object, bool?> canExecuteMethod;
         private readonly Action<object> executeMethod;
 
         public DelegateCommand(Action<object> executeMethod)
@@ -22,7 +22,7 @@ namespace Sample
         {
         }
 
-        public DelegateCommand(Action<object> executeMethod, Func<object, bool> canExecuteMethod)
+        public DelegateCommand(Action<object> executeMethod, Func<object, bool?> canExecuteMethod)
         {
             this.executeMethod = executeMethod;
             this.canExecuteMethod = canExecuteMethod;
@@ -42,7 +42,7 @@ namespace Sample
 
         public bool CanExecute(object parameter)
         {
-            return (this.canExecuteMethod == null) || this.canExecuteMethod(parameter);
+            return (this.canExecuteMethod == null) || this.canExecuteMethod(parameter).GetValueOrDefault();
         }
 
         public void Execute(object parameter)

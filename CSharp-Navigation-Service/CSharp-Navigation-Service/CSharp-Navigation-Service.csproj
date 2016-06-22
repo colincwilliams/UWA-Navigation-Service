@@ -146,6 +146,7 @@
     </ExcludeFromStyleCop>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrameState.cs" />
     <Compile Include="GlobalSuppressions.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
@@ -159,6 +160,7 @@
     <Compile Include="NavigationContextStore.cs" />
     <Compile Include="NavigationService.cs" />
     <Compile Include="PageBase.cs" />
+    <Compile Include="PageState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveStateEventArgs.cs" />
     <Compile Include="SuspensionManager.cs" />

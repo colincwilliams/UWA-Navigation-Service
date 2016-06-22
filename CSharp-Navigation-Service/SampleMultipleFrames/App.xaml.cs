@@ -3,7 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-namespace Sample
+namespace SampleMultipleFrames
 {
     using System;
     using System.Collections.Generic;
@@ -99,7 +99,6 @@ namespace Sample
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame()
                 {
-                    // TODO: Add comment about why to name your Frames.
                     Name = "RootFrame"
                 };
 
@@ -123,10 +122,10 @@ namespace Sample
                     }
                 }
 
-                rootFrame.NavigationFailed += this.OnNavigationFailed;
-
                 // Create the NavigationService for the frame
-                App.AppNavigationService = NavigationService.RegisterFrame(rootFrame, typeof(MainPage));
+                App.AppNavigationService = NavigationService.RegisterFrame(rootFrame, typeof(Container));
+
+                rootFrame.NavigationFailed += this.OnNavigationFailed;
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
