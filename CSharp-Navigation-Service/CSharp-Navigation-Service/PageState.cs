@@ -6,12 +6,11 @@
 namespace ColinCWilliams.CSharpNavigationService
 {
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Stores state information for a specific page.
     /// </summary>
-    public class PageState : Dictionary<string, object>
+    internal class PageState : Dictionary<string, object>
     {
     }
 }

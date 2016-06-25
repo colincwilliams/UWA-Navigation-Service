@@ -14,7 +14,7 @@ namespace ColinCWilliams.CSharpNavigationService
     /// <summary>
     /// An interface for managing app suspension and restoration.
     /// </summary>
-    public interface ISuspensionManager
+    internal interface ISuspensionManager
     {
         /// <summary>
         /// Gets a List of custom types provided to the <see cref="DataContractSerializer"/> when

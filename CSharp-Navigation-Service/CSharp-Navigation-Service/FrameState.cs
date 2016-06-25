@@ -11,22 +11,25 @@ namespace ColinCWilliams.CSharpNavigationService
     /// <summary>
     /// Represents the saved state for a frame.
     /// </summary>
-    public class FrameState
+    [DataContract]
+    internal class FrameState
     {
         /// <summary>
         /// Gets or sets the Navigation state for a frame.
         /// </summary>
+        [DataMember]
         public string Navigation { get; set; }
 
         /// <summary>
         /// Gets or sets the Navigation Context Service state for a frame.
         /// </summary>
+        [DataMember]
         public NavigationContextServiceState ContextService { get; set; }
 
         /// <summary>
         /// Gets or sets the states for the individual pages this Navigation Service has seen.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter needed for serialization.")]
-        public IDictionary<string, PageState> PageStates { get; set; }
+        [DataMember]
+        public Dictionary<string, PageState> PageStates { get; set; }
     }
 }

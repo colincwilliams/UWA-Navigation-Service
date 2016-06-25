@@ -9,7 +9,7 @@ namespace ColinCWilliams.CSharpNavigationService
     /// A service to manage NavigationContexts during navigation. Stores them
     /// with a related ID so that they may be retrieved later.
     /// </summary>
-    public interface INavigationContextService
+    internal interface INavigationContextService
     {
         /// <summary>
         ///  Adds a context to the context store.
