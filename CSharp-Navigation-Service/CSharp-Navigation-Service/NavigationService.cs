@@ -119,12 +119,12 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (frame == null)
             {
-                throw new ArgumentNullException("frame");
+                throw new ArgumentNullException(nameof(frame));
             }
 
             if (defaultPage == null)
             {
-                throw new ArgumentNullException("defaultPage");
+                throw new ArgumentNullException(nameof(defaultPage));
             }
 
             if (GetNavigationService(frame) != null)
@@ -165,7 +165,7 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (frame == null)
             {
-                throw new ArgumentNullException("frame");
+                throw new ArgumentNullException(nameof(frame));
             }
 
             RemoveFrame(frame);
@@ -180,7 +180,7 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (frame == null)
             {
-                throw new ArgumentNullException("frame");
+                throw new ArgumentNullException(nameof(frame));
             }
 
             return NavigationServices.FirstOrDefault(x => x.RootFrame == frame);
@@ -234,7 +234,7 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (pageType == null)
             {
-                throw new ArgumentNullException("pageType");
+                throw new ArgumentNullException(nameof(pageType));
             }
 
             if (context != null && !SuspensionManager.KnownTypes.Contains(context.GetType()))
