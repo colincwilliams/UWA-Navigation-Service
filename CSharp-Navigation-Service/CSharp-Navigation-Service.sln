@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCommon", "SampleCommo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMultipleFrames", "SampleMultipleFrames\SampleMultipleFrames.csproj", "{7E8B34AB-5C28-4BFE-8D59-9706467799BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavigationServiceTests", "NavigationServiceTests\NavigationServiceTests.csproj", "{FFB4B5F0-5024-40FC-94AD-68631EE975B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,26 @@ Global
 		{7E8B34AB-5C28-4BFE-8D59-9706467799BB}.Release|x86.ActiveCfg = Release|x86
 		{7E8B34AB-5C28-4BFE-8D59-9706467799BB}.Release|x86.Build.0 = Release|x86
 		{7E8B34AB-5C28-4BFE-8D59-9706467799BB}.Release|x86.Deploy.0 = Release|x86
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|ARM.ActiveCfg = Debug|ARM
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|ARM.Build.0 = Debug|ARM
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|ARM.Deploy.0 = Debug|ARM
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|x64.ActiveCfg = Debug|x64
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|x64.Build.0 = Debug|x64
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|x64.Deploy.0 = Debug|x64
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|x86.ActiveCfg = Debug|x86
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|x86.Build.0 = Debug|x86
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Debug|x86.Deploy.0 = Debug|x86
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|Any CPU.ActiveCfg = Release|x86
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|ARM.ActiveCfg = Release|ARM
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|ARM.Build.0 = Release|ARM
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|ARM.Deploy.0 = Release|ARM
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|x64.ActiveCfg = Release|x64
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|x64.Build.0 = Release|x64
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|x64.Deploy.0 = Release|x64
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|x86.ActiveCfg = Release|x86
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|x86.Build.0 = Release|x86
+		{FFB4B5F0-5024-40FC-94AD-68631EE975B9}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
