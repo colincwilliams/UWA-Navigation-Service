@@ -10,7 +10,7 @@ namespace ColinCWilliams.CSharpNavigationService
     /// <summary>
     /// A storage location for navigation contexts.
     /// </summary>
-    public class NavigationContextStore : Dictionary<long, NavigationContextBase>
+    internal class NavigationContextStore : Dictionary<long, NavigationContextBase>
     {
     }
 }

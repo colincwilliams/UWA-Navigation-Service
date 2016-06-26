@@ -23,7 +23,7 @@ namespace ColinCWilliams.CSharpNavigationService
         private static NavigationCacheMode defaultCacheMode = NavigationCacheMode.Enabled;
 
         private INavigationContextService contextService;
-        private INavigationService navigationService;
+        private NavigationService navigationService;
         private string pageKey;
 
         /// <summary>
@@ -45,6 +45,11 @@ namespace ColinCWilliams.CSharpNavigationService
             get { return defaultCacheMode; }
             set { defaultCacheMode = value; }
         }
+
+        /// <summary>
+        /// Gets the navigation service for this page.
+        /// </summary>
+        protected INavigationService LocalNavigationService => this.navigationService;
 
         /// <summary>
         /// Gets the current ViewModel for the page.
@@ -73,7 +78,7 @@ namespace ColinCWilliams.CSharpNavigationService
             // Get NavigationService
             if (this.navigationService == null)
             {
-                this.navigationService = NavigationService.GetNavigationService(this.Frame);
+                this.navigationService = NavigationService.GetNavigationService(this.Frame) as NavigationService;
                 if (this.navigationService == null)
                 {
                     throw new InvalidOperationException("Frame not registered before page navigation.");
