@@ -1,6 +1,8 @@
 ﻿namespace NavigationServiceTests
 {
+    using ColinCWilliams.CSharpNavigationService;
     using System;
+    using System.Collections.Generic;
     using Windows.ApplicationModel;
     using Windows.ApplicationModel.Activation;
     using Windows.UI.Xaml;
@@ -20,6 +22,11 @@
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            NavigationService.AddKnownTypes(new List<Type>()
+            {
+                typeof(TestNavigationContext)
+            });
         }
 
         /// <summary>
