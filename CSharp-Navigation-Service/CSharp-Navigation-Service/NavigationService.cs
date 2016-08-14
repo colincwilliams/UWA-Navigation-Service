@@ -17,9 +17,7 @@ namespace ColinCWilliams.CSharpNavigationService
     /// </summary>
     public class NavigationService : INavigationService
     {
-        private static readonly List<NavigationService> NavigationServices = new List<NavigationService>();
-        private static readonly ISuspensionManager SuspensionManager = new SuspensionManager();
-
+        private static readonly INavigationServiceManager ServiceManager = new NavigationServiceManager(new SuspensionManager());
         private readonly INavigationContextService contextService;
         private readonly WeakReference<Frame> rootFrame;
         private readonly string name;
@@ -117,43 +115,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <returns>The NavigationService for the registered frame.</returns>
         public static INavigationService RegisterFrame(Frame frame, Type defaultPage, NavigationContextBase defaultNavigationContext = null, bool restoreState = true)
         {
-            if (frame == null)
-            {
-                throw new ArgumentNullException(nameof(frame));
-            }
-
-            if (defaultPage == null)
-            {
-                throw new ArgumentNullException(nameof(defaultPage));
-            }
-
-            if (GetNavigationService(frame) != null)
-            {
-                throw new InvalidOperationException("Frame already associated with a NavigationService.");
-            }
-
-            // Clean up references before adding a new one.
-            RemoveFrame();
-
-            NavigationService navigationService = new NavigationService(frame, new NavigationContextService());
-
-            // Ensure navigationService is fully registered before restoring state
-            // or navigating so that it can be accessed by PageBase.
-            NavigationServices.Add(navigationService);
-
-            if (restoreState)
-            {
-                // This triggers NavigatedTo on PageBase if there is state restored.
-                navigationService.RestoreState();
-            }
-
-            // If state wasn't restored, navigate to a default page to populate the Frame.
-            if (navigationService.RootFrame.Content == null)
-            {
-                navigationService.Navigate(defaultPage, defaultNavigationContext);
-            }
-
-            return navigationService;
+            return ServiceManager.RegisterFrame(frame, defaultPage, defaultNavigationContext, restoreState);
         }
 
         /// <summary>
@@ -163,12 +125,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <param name="frame">The frame to unregister.</param>
         public static void UnregisterFrame(Frame frame)
         {
-            if (frame == null)
-            {
-                throw new ArgumentNullException(nameof(frame));
-            }
-
-            RemoveFrame(frame);
+            ServiceManager.UnregisterFrame(frame);
         }
 
         /// <summary>
@@ -178,12 +135,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <returns>The NavigationService for the provided frame.</returns>
         public static INavigationService GetNavigationService(Frame frame)
         {
-            if (frame == null)
-            {
-                throw new ArgumentNullException(nameof(frame));
-            }
-
-            return NavigationServices.FirstOrDefault(x => x.RootFrame == frame);
+            return ServiceManager.GetNavigationService(frame);
         }
 
         /// <summary>
@@ -193,11 +145,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <returns>The task for this operation.</returns>
         public static async Task SaveStateAsync()
         {
-            // Clean up NavigationServices so we don't save the state of services with no Frame.
-            RemoveFrame();
-
-            // Save state to disk.
-            await SuspensionManager.SaveAsync(NavigationServices);
+            await ServiceManager.SaveStateAsync();
         }
 
         /// <summary>
@@ -206,7 +154,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <returns>The task for this operation.</returns>
         public static async Task RestoreStateAsync()
         {
-            await SuspensionManager.RestoreAsync();
+            await ServiceManager.RestoreStateAsync();
         }
 
         /// <summary>
@@ -216,13 +164,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <param name="types">The known types to add.</param>
         public static void AddKnownTypes(List<Type> types)
         {
-            if (types != null)
-            {
-                foreach (Type type in types)
-                {
-                    SuspensionManager.AddKnownType(type);
-                }
-            }
+            ServiceManager.AddKnownTypes(types);
         }
 
         /// <summary>
@@ -237,7 +179,7 @@ namespace ColinCWilliams.CSharpNavigationService
                 throw new ArgumentNullException(nameof(pageType));
             }
 
-            if (context != null && !SuspensionManager.KnownTypes.Contains(context.GetType()))
+            if (context != null && !ServiceManager.KnownTypes.Contains(context.GetType()))
             {
                 throw new ArgumentException(
                     "Cannot navigate with a context that has not been registered as a Known Type. Use NavigationService.AddKnownTypes to register this context type before use.",
@@ -291,27 +233,11 @@ namespace ColinCWilliams.CSharpNavigationService
         }
 
         /// <summary>
-        /// Removes the NavigationService for the provided frame and cleans up any NavigationServices where their
-        /// Frame has been garbage collected.
-        /// </summary>
-        /// <param name="frame">The frame to remove or null to just clean up invalid WeakReferences.</param>
-        private static void RemoveFrame(Frame frame = null)
-        {
-            IEnumerable<NavigationService> servicesToRemove = NavigationServices.Where(x => x.GetFrameSafe() == null || x.GetFrameSafe() == frame);
-            foreach (NavigationService service in servicesToRemove.ToList())
-            {
-                SuspensionManager.DeleteState(service.Name);
-                NavigationServices.Remove(service);
-            }
-        }
-
-        /// <summary>
         /// Restores the state of this Navigation Service from the <see cref="SuspensionManager"/>.
         /// </summary>
-        private void RestoreState()
+        /// <param name="state">The state to restore from.</param>
+        internal void RestoreState(FrameState state)
         {
-            FrameState state = SuspensionManager.GetState(this.Name);
-
             if (state != null)
             {
                 this.ContextService.RestoreState(state.ContextService);
@@ -327,7 +253,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// Attempts to get the Frame from the weak reference.
         /// </summary>
         /// <returns>The frame or null if the Frame was garbage collected.</returns>
-        private Frame GetFrameSafe()
+        internal Frame GetFrameSafe()
         {
             Frame frame = null;
             this.rootFrame.TryGetTarget(out frame);

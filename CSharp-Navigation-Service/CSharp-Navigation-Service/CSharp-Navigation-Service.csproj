@@ -153,12 +153,14 @@
     <Compile Include="INavigatableViewModel.cs" />
     <Compile Include="INavigationContextService.cs" />
     <Compile Include="INavigationService.cs" />
+    <Compile Include="INavigationServiceManager.cs" />
     <Compile Include="ISuspensionManager.cs" />
     <Compile Include="NavigationContextBase.cs" />
     <Compile Include="NavigationContextService.cs" />
     <Compile Include="NavigationContextServiceState.cs" />
     <Compile Include="NavigationContextStore.cs" />
     <Compile Include="NavigationService.cs" />
+    <Compile Include="NavigationServiceManager.cs" />
     <Compile Include="PageBase.cs" />
     <Compile Include="PageState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -17,7 +17,7 @@ namespace ColinCWilliams.CSharpNavigationService
     internal interface ISuspensionManager
     {
         /// <summary>
-        /// Gets a List of custom types provided to the <see cref="DataContractSerializer"/> when
+        /// Gets a readonly Collection of custom types provided to the <see cref="DataContractSerializer"/> when
         /// reading and writing session state.
         /// </summary>
         IReadOnlyCollection<Type> KnownTypes { get; }
@@ -49,8 +49,9 @@ namespace ColinCWilliams.CSharpNavigationService
         /// Restores the state of a NavigationService.
         /// </summary>
         /// <param name="name">The name of the NavigationService to get state for.</param>
-        /// <returns>The state of the NavigationService if it was previously restored, otherwise null.</returns>
-        FrameState GetState(string name);
+        /// <param name="state">The state of the NavigationService if it was previously restored, otherwise null.</param>
+        /// <returns>True if state was successfully retrieved, false otherwise.</returns>
+        bool TryGetState(string name, out FrameState state);
 
         /// <summary>
         /// Deletes the restored session state for the NavigationService with the given name.

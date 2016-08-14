@@ -124,16 +124,20 @@ namespace ColinCWilliams.CSharpNavigationService
         /// Restores the state of a NavigationService.
         /// </summary>
         /// <param name="name">The name of the NavigationService to get state for.</param>
-        /// <returns>The state of the NavigationService if it was previously restored, otherwise null.</returns>
-        public FrameState GetState(string name)
+        /// <param name="state">The state of the NavigationService if it was previously restored, otherwise null.</param>
+        /// <returns>True if state was successfully retrieved, false otherwise.</returns>
+        public bool TryGetState(string name, out FrameState state)
         {
-            FrameState state = null;
             if (this.SessionState.ContainsKey(name))
             {
                 state = this.SessionState[name];
+                return true;
             }
-
-            return state;
+            else
+            {
+                state = null;
+                return false;
+            }
         }
 
         /// <summary>
