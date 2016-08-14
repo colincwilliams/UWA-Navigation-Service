@@ -1,6 +1,6 @@
 # CSharp-Navigation-Service
 
-[![Build status](https://ci.appveyor.com/api/projects/status/k3aeppeyvjf4db89/branch/master?svg=true)](https://ci.appveyor.com/project/ColinWilliams/csharp-navigation-service/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/k3aeppeyvjf4db89/branch/master?svg=true)](https://ci.appveyor.com/project/ColinWilliams/csharp-navigation-service/branch/master) [![NuGet](https://img.shields.io/nuget/v/CSharp-Navigation-Service.svg?maxAge=2592000)](https://www.nuget.org/packages/CSharp-Navigation-Service/)
 
 ## What is it?
 **NOTE: This is still in early development. Use at your own risk. Breaking changes will most likely be introduced.**
