@@ -102,6 +102,8 @@ namespace SampleMultipleFrames
                     Name = "RootFrame"
                 };
 
+                rootFrame.NavigationFailed += this.OnNavigationFailed;
+
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     /*********************************************************
@@ -124,8 +126,6 @@ namespace SampleMultipleFrames
 
                 // Create the NavigationService for the frame
                 App.AppNavigationService = NavigationService.RegisterFrame(rootFrame, typeof(Container));
-
-                rootFrame.NavigationFailed += this.OnNavigationFailed;
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;

@@ -24,7 +24,12 @@ namespace ColinCWilliams.CSharpNavigationService
         private readonly WeakReference<Frame> rootFrame;
         private readonly string name;
 
-        private NavigationService(Frame frame, INavigationContextService contextService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationService"/> class.
+        /// </summary>
+        /// <param name="frame">The Frame to use for navigation.</param>
+        /// <param name="contextService">The context service to use for storing and retrieving Navigation Contexts during navigation.</param>
+        internal NavigationService(Frame frame, INavigationContextService contextService)
         {
             if (frame == null)
             {
@@ -33,7 +38,7 @@ namespace ColinCWilliams.CSharpNavigationService
 
             if (contextService == null)
             {
-                throw new ArgumentNullException(nameof(frame));
+                throw new ArgumentNullException(nameof(contextService));
             }
 
             this.contextService = contextService;
@@ -41,19 +46,6 @@ namespace ColinCWilliams.CSharpNavigationService
             this.name = frame.Name;
             this.PageStates = new Dictionary<string, PageState>();
         }
-
-        /// <summary>
-        /// Gets the context service associated with this NavigationService.
-        /// </summary>
-        public INavigationContextService ContextService
-        {
-            get { return this.contextService; }
-        }
-
-        /// <summary>
-        /// Gets the states for the individual pages this Navigation Service has seen.
-        /// </summary>
-        public IDictionary<string, PageState> PageStates { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether calling <see cref="GoBack" /> will success.
@@ -66,6 +58,19 @@ namespace ColinCWilliams.CSharpNavigationService
         /// </summary>
         /// <returns>True if forward navigation can occur, false otherwise.</returns>
         public bool CanGoForward => this.RootFrame.CanGoForward;
+
+        /// <summary>
+        /// Gets the states for the individual pages this Navigation Service has seen.
+        /// </summary>
+        internal Dictionary<string, PageState> PageStates { get; private set; }
+
+        /// <summary>
+        /// Gets the context service associated with this NavigationService.
+        /// </summary>
+        internal INavigationContextService ContextService
+        {
+            get { return this.contextService; }
+        }
 
         /// <summary>
         /// Gets the root frame for the navigation service.
@@ -114,12 +119,12 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (frame == null)
             {
-                throw new ArgumentNullException("frame");
+                throw new ArgumentNullException(nameof(frame));
             }
 
             if (defaultPage == null)
             {
-                throw new ArgumentNullException("defaultPage");
+                throw new ArgumentNullException(nameof(defaultPage));
             }
 
             if (GetNavigationService(frame) != null)
@@ -160,7 +165,7 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (frame == null)
             {
-                throw new ArgumentNullException("frame");
+                throw new ArgumentNullException(nameof(frame));
             }
 
             RemoveFrame(frame);
@@ -175,7 +180,7 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (frame == null)
             {
-                throw new ArgumentNullException("frame");
+                throw new ArgumentNullException(nameof(frame));
             }
 
             return NavigationServices.FirstOrDefault(x => x.RootFrame == frame);
@@ -229,7 +234,7 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (pageType == null)
             {
-                throw new ArgumentNullException("pageType");
+                throw new ArgumentNullException(nameof(pageType));
             }
 
             if (context != null && !SuspensionManager.KnownTypes.Contains(context.GetType()))
@@ -318,6 +323,10 @@ namespace ColinCWilliams.CSharpNavigationService
             }
         }
 
+        /// <summary>
+        /// Attempts to get the Frame from the weak reference.
+        /// </summary>
+        /// <returns>The frame or null if the Frame was garbage collected.</returns>
         private Frame GetFrameSafe()
         {
             Frame frame = null;

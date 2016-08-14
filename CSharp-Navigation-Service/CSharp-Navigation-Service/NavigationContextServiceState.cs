@@ -5,14 +5,13 @@
 
 namespace ColinCWilliams.CSharpNavigationService
 {
-    using System.Collections.Generic;
     using System.Runtime.Serialization;
 
     /// <summary>
     /// The state of a NavigationContextService for saving or restoring.
     /// </summary>
     [DataContract]
-    public class NavigationContextServiceState
+    internal class NavigationContextServiceState
     {
         /// <summary>
         /// Gets or sets the ID that should be used for the next item being stored.
