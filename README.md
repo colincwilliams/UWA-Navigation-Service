@@ -1,5 +1,7 @@
 # CSharp-Navigation-Service
 
+[![Build status](https://ci.appveyor.com/api/projects/status/k3aeppeyvjf4db89/branch/master?svg=true)](https://ci.appveyor.com/project/ColinWilliams/csharp-navigation-service/branch/master)
+
 ## What is it?
 **NOTE: This is still in early development. Use at your own risk. Breaking changes will most likely be introduced.**
 
