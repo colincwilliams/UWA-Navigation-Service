@@ -11,11 +11,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CSharp-Navigation-Service")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A C# library for handling page navigation for Universal Windows Platform (UWP) applications.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Colin C. Williams")]
 [assembly: AssemblyProduct("CSharp-Navigation-Service")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright (c) Colin C. Williams. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
