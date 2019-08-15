@@ -59,7 +59,7 @@ namespace SampleCommon
         /*********************************************************
          * Activate is called during the OnNavigatedTo page event.
          *********************************************************/
-        public virtual Task Activate(INavigationService navigationService, NavigationContextBase navigationContext, IReadOnlyDictionary<string, object> pageState)
+        public virtual Task Activate(INavigationService navigationService, NavigationContextBase navigationContext, IReadOnlyPageState pageState)
         {
             this.NavigationService = navigationService;
 
@@ -86,10 +86,7 @@ namespace SampleCommon
         {
             field = value;
 
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

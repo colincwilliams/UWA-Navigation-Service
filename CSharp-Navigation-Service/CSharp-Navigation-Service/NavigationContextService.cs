@@ -42,7 +42,7 @@ namespace ColinCWilliams.CSharpNavigationService
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             long id = this.CurrentId;
@@ -75,7 +75,7 @@ namespace ColinCWilliams.CSharpNavigationService
             return new NavigationContextServiceState()
             {
                 CurrentId = this.currentId,
-                Store = this.contextStore
+                Store = this.contextStore,
             };
         }
 

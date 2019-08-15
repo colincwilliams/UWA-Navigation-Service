@@ -33,7 +33,7 @@ namespace ColinCWilliams.CSharpNavigationService
             typeof(NavigationContextServiceState),
             typeof(NavigationContextStore),
             typeof(FrameState),
-            typeof(PageState)
+            typeof(PageState),
         };
 
         /// <summary>
@@ -75,16 +75,18 @@ namespace ColinCWilliams.CSharpNavigationService
                 }
 
                 // Serialize the session state synchronously to avoid asynchronous access to shared state
-                MemoryStream sessionData = new MemoryStream();
-                DataContractSerializer serializer = new DataContractSerializer(this.SessionState.GetType(), this.KnownTypes);
-                serializer.WriteObject(sessionData, this.sessionState);
-
-                // Get an output stream for the SessionState file and write the state asynchronously
-                StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(SessionStateFilename, CreationCollisionOption.ReplaceExisting);
-                using (Stream fileStream = await file.OpenStreamForWriteAsync())
+                using (MemoryStream sessionData = new MemoryStream())
                 {
-                    sessionData.Seek(0, SeekOrigin.Begin);
-                    await sessionData.CopyToAsync(fileStream);
+                    DataContractSerializer serializer = new DataContractSerializer(this.SessionState.GetType(), this.KnownTypes);
+                    serializer.WriteObject(sessionData, this.sessionState);
+
+                    // Get an output stream for the SessionState file and write the state asynchronously
+                    StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(SessionStateFilename, CreationCollisionOption.ReplaceExisting);
+                    using (Stream fileStream = await file.OpenStreamForWriteAsync().ConfigureAwait(false))
+                    {
+                        sessionData.Seek(0, SeekOrigin.Begin);
+                        await sessionData.CopyToAsync(fileStream).ConfigureAwait(false);
+                    }
                 }
             }
             catch (Exception e)

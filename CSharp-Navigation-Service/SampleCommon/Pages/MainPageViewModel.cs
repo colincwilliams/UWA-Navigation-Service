@@ -58,7 +58,7 @@ namespace SampleCommon
             set { this.SetPropertyValue(ref this.value3, value); }
         }
 
-        public async override Task Activate(INavigationService navigationService, NavigationContextBase navigationContext, IReadOnlyDictionary<string, object> pageState)
+        public async override Task Activate(INavigationService navigationService, NavigationContextBase navigationContext, IReadOnlyPageState pageState)
         {
             await base.Activate(navigationService, navigationContext, pageState);
 

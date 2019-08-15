@@ -197,7 +197,7 @@ namespace ColinCWilliams.CSharpNavigationService
             RemoveFrame();
 
             // Save state to disk.
-            await SuspensionManager.SaveAsync(NavigationServices);
+            await SuspensionManager.SaveAsync(NavigationServices).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <returns>The task for this operation.</returns>
         public static async Task RestoreStateAsync()
         {
-            await SuspensionManager.RestoreAsync();
+            await SuspensionManager.RestoreAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace ColinCWilliams.CSharpNavigationService
             {
                 throw new ArgumentException(
                     "Cannot navigate with a context that has not been registered as a Known Type. Use NavigationService.AddKnownTypes to register this context type before use.",
-                    "context");
+                    nameof(context));
             }
 
             object parameter = null;
@@ -286,7 +286,7 @@ namespace ColinCWilliams.CSharpNavigationService
             {
                 Navigation = this.RootFrame.GetNavigationState(),
                 ContextService = this.ContextService.SaveState(),
-                PageStates = this.PageStates
+                PageStates = this.PageStates,
             };
         }
 
