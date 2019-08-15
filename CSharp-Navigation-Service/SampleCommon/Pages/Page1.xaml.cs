@@ -10,7 +10,7 @@ namespace SampleCommon
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Page1 : PageBase
+    public sealed partial class Page1 : Page1Base
     {
         public Page1()
         {
@@ -26,5 +26,9 @@ namespace SampleCommon
              *********************************************************/
             this.DataContext = new Page1ViewModel();
         }
+    }
+
+    public abstract class Page1Base : PageBase<Page1ViewModel>
+    {
     }
 }

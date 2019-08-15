@@ -8,7 +8,7 @@ namespace SampleCommon
     using ColinCWilliams.CSharpNavigationService;
     using Windows.UI.Xaml.Navigation;
 
-    public sealed partial class MainPage : PageBase
+    public sealed partial class MainPage : MainPageBase
     {
         public MainPage()
         {
@@ -32,5 +32,9 @@ namespace SampleCommon
              *********************************************************/
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
+    }
+
+    public abstract class MainPageBase : PageBase<MainPageViewModel>
+    {
     }
 }

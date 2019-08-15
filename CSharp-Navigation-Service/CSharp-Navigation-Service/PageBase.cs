@@ -18,16 +18,16 @@ namespace ColinCWilliams.CSharpNavigationService
     /// A base class that all pages should inherit from for navigation, state
     /// saving and other essential functionality.
     /// </summary>
-    public abstract class PageBase : Page
+    /// <typeparam name="TViewModel">The ViewModel type.</typeparam>
+    public abstract class PageBase<TViewModel> : Page
+        where TViewModel : class, INavigatableViewModel
     {
-        private static NavigationCacheMode defaultCacheMode = NavigationCacheMode.Enabled;
-
         private INavigationContextService contextService;
         private NavigationService navigationService;
         private string pageKey;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PageBase" /> class.
+        /// Initializes a new instance of the <see cref="PageBase{TViewModel}"/> class.
         /// </summary>
         protected PageBase()
         {
@@ -40,11 +40,8 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <summary>
         /// Gets or sets the cache mode set by default on new pages.
         /// </summary>
-        public static NavigationCacheMode DefaultCacheMode
-        {
-            get { return defaultCacheMode; }
-            set { defaultCacheMode = value; }
-        }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes", Justification = "This is the most logical place for this to live.")]
+        public static NavigationCacheMode DefaultCacheMode { get; set; } = NavigationCacheMode.Enabled;
 
         /// <summary>
         /// Gets the navigation service for this page.
@@ -54,7 +51,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <summary>
         /// Gets the current ViewModel for the page.
         /// </summary>
-        protected INavigatableViewModel ViewModel
+        protected TViewModel ViewModel
         {
             get;
             private set;
@@ -91,13 +88,8 @@ namespace ColinCWilliams.CSharpNavigationService
             // Set ViewModel
             if (this.ViewModel == null)
             {
-                INavigatableViewModel viewModel = this.DataContext as INavigatableViewModel;
-                if (viewModel == null)
-                {
-                    throw new InvalidOperationException("ViewModel must implement INavigatableViewModel interface.");
-                }
-
-                this.ViewModel = viewModel;
+                TViewModel viewModel = this.DataContext as TViewModel;
+                this.ViewModel = viewModel ?? throw new InvalidOperationException("A page's DataContext cannot be null when OnNavigatedTo is executed.");
             }
 
             // Load page state if this page wasn't already cached by the frame
@@ -131,7 +123,7 @@ namespace ColinCWilliams.CSharpNavigationService
             }
 
             // Activate the ViewModel
-            await this.ViewModel.Activate(this.navigationService, context, pageState);
+            await this.ViewModel.Activate(this.navigationService, context, pageState).ConfigureAwait(false);
         }
 
         /// <summary>
