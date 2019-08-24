@@ -1,1 +1,2 @@
+& ./external/nuget.exe restore ./Uwa-Navigation-Service/Uwa-Navigation-Service/Uwa-Navigation-Service.csproj
 & ./external/nuget.exe pack ./Uwa-Navigation-Service/Uwa-Navigation-Service/Uwa-Navigation-Service.csproj -Build -Symbols -properties Configuration=Release
