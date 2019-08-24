@@ -5,7 +5,7 @@
 
 namespace SampleMultipleFrames
 {
-    using ColinCWilliams.CSharpNavigationService;
+    using ColinCWilliams.UwaNavigationService;
     using SampleCommon;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;

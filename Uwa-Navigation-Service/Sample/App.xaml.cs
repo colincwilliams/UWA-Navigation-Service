@@ -8,7 +8,7 @@ namespace Sample
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using ColinCWilliams.CSharpNavigationService;
+    using ColinCWilliams.UwaNavigationService;
     using SampleCommon;
     using Windows.ApplicationModel;
     using Windows.ApplicationModel.Activation;
@@ -51,6 +51,9 @@ namespace Sample
             // etc.
         };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="App"/> class.
+        /// </summary>
         public App()
         {
             this.InitializeComponent();
@@ -75,6 +78,10 @@ namespace Sample
          * I would recommend storing this in a IOC system, such
          * as MVVMLight.
          *********************************************************/
+
+         /// <summary>
+         /// Gets the app's navigation service.
+         /// </summary>
         public static INavigationService AppNavigationService { get; private set; }
 
         /// <summary>
@@ -134,10 +141,10 @@ namespace Sample
         }
 
         /// <summary>
-        /// Invoked when Navigation to a certain page fails
+        /// Invoked when Navigation to a certain page fails.
         /// </summary>
-        /// <param name="sender">The Frame which failed navigation</param>
-        /// <param name="e">Details about the navigation failure</param>
+        /// <param name="sender">The Frame which failed navigation.</param>
+        /// <param name="e">Details about the navigation failure.</param>
         private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);

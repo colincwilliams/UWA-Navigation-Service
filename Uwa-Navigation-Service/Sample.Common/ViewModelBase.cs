@@ -9,7 +9,7 @@ namespace SampleCommon
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
-    using ColinCWilliams.CSharpNavigationService;
+    using ColinCWilliams.UwaNavigationService;
 
     /*********************************************************
      * All of your ViewModels must implement the

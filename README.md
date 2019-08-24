@@ -1,11 +1,11 @@
-# CSharp-Navigation-Service
+# Uwa-Navigation-Service
 
-[![Build status](https://ci.appveyor.com/api/projects/status/k3aeppeyvjf4db89/branch/master?svg=true)](https://ci.appveyor.com/project/ColinWilliams/csharp-navigation-service/branch/master) [![NuGet](https://img.shields.io/nuget/v/CSharp-Navigation-Service.svg?maxAge=2592000)](https://www.nuget.org/packages/CSharp-Navigation-Service/)
+[![NuGet](https://img.shields.io/nuget/v/Uwa-Navigation-Service.svg?maxAge=2592000)](https://www.nuget.org/packages/Uwa-Navigation-Service/)
 
 ## What is it?
 **NOTE: This is still in early development. Use at your own risk. Breaking changes will most likely be introduced.**
 
-This is a C# library for handling page navigation for Universal Windows Platform (UWP) applications. It takes the SuspensionManager and NavigationHelper files from the Visual Studio App Templates, adds the ability to pass complex objects during page navigation, and makes it a library.
+This is a library for handling page navigation for Universal Windows Platform (UWP) applications. It takes the SuspensionManager and NavigationHelper files from the Visual Studio App Templates, adds the ability to pass complex objects during page navigation, and makes it a library.
 
 Key features:
 * Register and unregister ALL your frames, with multiple frame support.
