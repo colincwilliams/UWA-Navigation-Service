@@ -6,8 +6,10 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
+    <license type="expression">MIT</license>
     <licenseUrl>https://github.com/colincwilliams/UWA-Navigation-Service/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/colincwilliams/UWA-Navigation-Service</projectUrl>
+    <repository type="git" url="https://github.com/colincwilliams/UWA-Navigation-Service.git" branch="dev" />
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Initial release.</releaseNotes>
