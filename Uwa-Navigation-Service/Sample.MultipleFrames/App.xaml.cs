@@ -96,7 +96,7 @@ namespace SampleMultipleFrames
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame()
                 {
-                    Name = "RootFrame"
+                    Name = "RootFrame",
                 };
 
                 rootFrame.NavigationFailed += this.OnNavigationFailed;

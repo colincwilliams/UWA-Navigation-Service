@@ -97,7 +97,7 @@ namespace Sample
                 rootFrame = new Frame()
                 {
                     // TODO: Add comment about why to name your Frames.
-                    Name = "RootFrame"
+                    Name = "RootFrame",
                 };
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)

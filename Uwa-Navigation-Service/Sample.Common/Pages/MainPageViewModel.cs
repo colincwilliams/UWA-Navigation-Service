@@ -29,7 +29,7 @@ namespace SampleCommon
                         {
                             Value1 = this.Value1,
                             Value2 = this.Value2,
-                            Value3 = this.Value3
+                            Value3 = this.Value3,
                         };
 
                         this.NavigationService.Navigate(typeof(Page1), context);
