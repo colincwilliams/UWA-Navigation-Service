@@ -1,17 +1,16 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
+    <id>Uwa-Navigation-Service</id>
+    <version>0.1.0.0</version>
+    <title>Uwa-Navigation-Service</title>
+    <authors>Colin C. Williams</authors>
+    <owners>Colin C. Williams</owners>
     <license type="expression">MIT</license>
-    <licenseUrl>https://github.com/colincwilliams/UWA-Navigation-Service/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/colincwilliams/UWA-Navigation-Service</projectUrl>
     <repository type="git" url="https://github.com/colincwilliams/UWA-Navigation-Service.git" branch="dev" />
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>A library for handling page navigation and state for Universal Windows Platform (UWP) applications.</description>
     <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>UWA CSharp Navigation State Management</tags>
