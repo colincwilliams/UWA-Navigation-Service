@@ -329,9 +329,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <returns>The frame or null if the Frame was garbage collected.</returns>
         private Frame GetFrameSafe()
         {
-            Frame frame = null;
-            this.rootFrame.TryGetTarget(out frame);
-
+            this.rootFrame.TryGetTarget(out Frame frame);
             return frame;
         }
     }

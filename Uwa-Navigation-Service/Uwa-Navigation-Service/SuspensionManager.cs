@@ -8,7 +8,6 @@ namespace ColinCWilliams.CSharpNavigationService
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Runtime.Serialization;
     using System.Threading.Tasks;
     using Windows.Storage;
@@ -26,8 +25,7 @@ namespace ColinCWilliams.CSharpNavigationService
     {
         private const string SessionStateFilename = "_sessionState.xml";
 
-        private Dictionary<string, FrameState> sessionState = new Dictionary<string, FrameState>();
-        private List<Type> knownTypes = new List<Type>()
+        private readonly HashSet<Type> knownTypes = new HashSet<Type>()
         {
             // Internal types that should be known for serialization
             typeof(NavigationContextServiceState),
@@ -46,16 +44,13 @@ namespace ColinCWilliams.CSharpNavigationService
         }
 
         /// <summary>
-        /// Gets global session state for the current session.  This state is
+        /// Gets or sets global session state for the current session.  This state is
         /// serialized by <see cref="SaveAsync"/> and restored by
         /// <see cref="RestoreAsync"/>, so values must be serializable by
         /// <see cref="DataContractSerializer"/> and should be as compact as possible.  Strings
         /// and other self-contained data types are strongly recommended.
         /// </summary>
-        private Dictionary<string, FrameState> SessionState
-        {
-            get { return this.sessionState; }
-        }
+        private Dictionary<string, FrameState> SessionState { get; set; } = new Dictionary<string, FrameState>();
 
         /// <summary>
         /// Save the current SessionState for the provided navigationServices. All NavigationServices
@@ -78,7 +73,7 @@ namespace ColinCWilliams.CSharpNavigationService
                 using (MemoryStream sessionData = new MemoryStream())
                 {
                     DataContractSerializer serializer = new DataContractSerializer(this.SessionState.GetType(), this.KnownTypes);
-                    serializer.WriteObject(sessionData, this.sessionState);
+                    serializer.WriteObject(sessionData, this.SessionState);
 
                     // Get an output stream for the SessionState file and write the state asynchronously
                     StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(SessionStateFilename, CreationCollisionOption.ReplaceExisting);
@@ -103,7 +98,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// completes.</returns>
         public async Task RestoreAsync()
         {
-            this.sessionState = new Dictionary<string, FrameState>();
+            this.SessionState = new Dictionary<string, FrameState>();
 
             try
             {
@@ -113,7 +108,7 @@ namespace ColinCWilliams.CSharpNavigationService
                 {
                     // Deserialize the Session State
                     DataContractSerializer serializer = new DataContractSerializer(typeof(Dictionary<string, FrameState>), this.KnownTypes);
-                    this.sessionState = (Dictionary<string, FrameState>)serializer.ReadObject(inStream.AsStreamForRead());
+                    this.SessionState = (Dictionary<string, FrameState>)serializer.ReadObject(inStream.AsStreamForRead());
                 }
             }
             catch (Exception e)
@@ -153,10 +148,7 @@ namespace ColinCWilliams.CSharpNavigationService
         /// <param name="type">The type to add.</param>
         public void AddKnownType(Type type)
         {
-            if (!this.KnownTypes.Contains(type))
-            {
-                this.knownTypes.Add(type);
-            }
+            this.knownTypes.Add(type);
         }
     }
 }
