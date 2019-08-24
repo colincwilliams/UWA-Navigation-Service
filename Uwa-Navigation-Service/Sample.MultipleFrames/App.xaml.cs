@@ -8,7 +8,7 @@ namespace SampleMultipleFrames
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using ColinCWilliams.CSharpNavigationService;
+    using ColinCWilliams.UwaNavigationService;
     using SampleCommon;
     using Windows.ApplicationModel;
     using Windows.ApplicationModel.Activation;

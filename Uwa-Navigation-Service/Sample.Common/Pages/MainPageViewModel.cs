@@ -7,7 +7,7 @@ namespace SampleCommon
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using ColinCWilliams.CSharpNavigationService;
+    using ColinCWilliams.UwaNavigationService;
 
     public class MainPageViewModel : ViewModelBase
     {

@@ -5,7 +5,7 @@
 
 namespace SampleCommon
 {
-    using ColinCWilliams.CSharpNavigationService;
+    using ColinCWilliams.UwaNavigationService;
     using Windows.UI.Xaml.Navigation;
 
     public sealed partial class MainPage : MainPageBase

@@ -5,7 +5,7 @@
 
 namespace SampleCommon
 {
-    using ColinCWilliams.CSharpNavigationService;
+    using ColinCWilliams.UwaNavigationService;
 
     /*********************************************************
      * All of your NavigationContexts must inherit from
